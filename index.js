@@ -15,6 +15,17 @@ class TacheBDD {
         }) 
     }
     ajouter(tache) {
+        fetch(baseUrl,{
+    
+            method: "POST",
+            body: JSON.stringify(_data),
+            headers: {"Content-type":"application/json; charset=UTF-8"}
+
+        .then(response => response.json()) 
+        .then(json => console.log(json));
+        .catch(err => console.log(err));
+
+})
 
     }
     modifier(tache) {
@@ -42,22 +53,22 @@ class tache{
     getid() {
 
     }
-    getcontenu() {
+    getContenu() {
 
     }
-    getdate() {
+    getDate() {
 
     }
-    getterminee() {
+    getTerminee() {
 
     }
 
 
-    setcontenu(contenu) {
+    setContenu(contenu) {
         this.contenu = contenu;
 
     }
-    setterminee(terminee) {
+    setTerminee(terminee) {
         this.terminee = terminee;
 
     }
