@@ -15,17 +15,17 @@ class TacheBDD {
         }) 
     }
     ajouter(tache) {
-        fetch(baseUrl,{
+        // fetch(baseUrl,{
     
-            method: "POST",
-            body: JSON.stringify(_data),
-            headers: {"Content-type":"application/json; charset=UTF-8"}
+        //     method: "POST",
+        //     body: JSON.stringify(_data),
+        //     headers: {"Content-type":"application/json; charset=UTF-8"}
 
-        .then(response => response.json()) 
-        .then(json => console.log(json));
-        .catch(err => console.log(err));
+        // .then(response => response.json()) 
+        // .then(json => console.log(json))
+        // .catch(err => console.log(err))
 
-})
+    })
 
     }
     modifier(tache) {
