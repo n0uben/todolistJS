@@ -3,9 +3,16 @@ class TacheBDD {
     baseUrl = "http://localhost:9090/api/taches/";
 
     getAll() {
-        // fetch(baseUrl)
-        // .then()
-        // .catch()
+        fetch(baseUrl)
+        .then(function(reponse) {
+            return reponse.json();
+        })
+        .then(function(reponseJson) {
+            console.log(reponseJson);
+        })
+        .catch(function(error) {
+            console.log(error);
+        }) 
     }
     ajouter(tache) {
 
