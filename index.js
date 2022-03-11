@@ -42,16 +42,14 @@ class TacheBDD {
 }
 
 class tache{
-    id;
-    date;
-    contenu;
+   
+    description;
     terminee;
 
-    constructor(contenu,terminee){
-        this.id = null;
-        this.date = null ;
-        this.contenu = contenu;
-        this.terminee = terminee;
+    constructor(description){
+        
+        this.description = description;
+      
 
     }
 
@@ -59,7 +57,7 @@ class tache{
     getid() {
 
     }
-    getContenu() {
+    getdescription() {
 
     }
     getDate() {
@@ -70,8 +68,8 @@ class tache{
     }
 
 
-    setContenu(contenu) {
-        this.contenu = contenu;
+    setdescription(description) {
+        this.description = description;
 
     }
     setTerminee(terminee) {
@@ -90,6 +88,6 @@ class tache{
 let tache1 = new TacheBDD("http://localhost:9090/api/taches");
 console.log(tache1)
 tache1.getAll();
-let maTache = new tache("efgyufuyzegfyq",true)
+let maTache = new tache("efgyufuyzegfy");
 console.log(maTache);
 tache1.ajouter(maTache);
