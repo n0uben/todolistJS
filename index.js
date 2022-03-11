@@ -7,7 +7,7 @@ class TacheBDD {
     }
 
     getAll() {
-        fetch(baseUrl)
+        fetch(this.baseUrl)
         .then(function(reponse) {
             return reponse.json();
         })
@@ -86,3 +86,6 @@ class tache{
     }
 
 }
+let tache1 = new TacheBDD("http://localhost:9090/api/taches");
+console.log(tache1)
+tache1.getAll();
