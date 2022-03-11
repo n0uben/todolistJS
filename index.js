@@ -22,7 +22,7 @@ class TacheBDD {
     ajouter(tache) {
         fetch(this.baseUrl,{
     
-            method: "PUT",
+            method: "POST",
             body: JSON.stringify(tache),
             headers: {"Content-type":"application/json; charset=UTF-8"}
 
@@ -46,7 +46,7 @@ class TacheBDD {
     }
 /////////////////////////////////////////////////////////////////////
     terminer(tache) {
-        fetch(this.baseUrl +tache.getid()+ "/terminer",{
+        fetch(this.baseUrl +tache.getid() + "/terminer",{
     
             method: "PUT",
             body: JSON.stringify(tache),
@@ -65,13 +65,10 @@ class TacheBDD {
 class tache{
    
     description;
-    terminee;
+    // terminee;
 
     constructor(description){
-        
         this.description = description;
-      
-
     }
 
 
@@ -91,15 +88,12 @@ class tache{
 
     setDescription(description) {
         this.description = description;
-
     }
     setTerminee(terminee) {
         this.terminee = terminee;
-
     }
     toString() {
         return this.toString();
-
     }
     equals(other) {
         //à faire
@@ -108,21 +102,21 @@ class tache{
 }
 /////////////////////////////////////////////////////////////
 
-let tachebdd = new TacheBDD("http://localhost:9090/api/taches");
+let laBdd = new TacheBDD("http://localhost:9090/api/taches");
 
-console.log(tachebdd)
-tachebdd.getAll();
+console.log(laBdd)
+laBdd.getAll();
 
 let maTache = new tache("efgyufuyzegfy");
 console.log(maTache);
 
-tachebdd.ajouter(maTache);
+laBdd.ajouter(maTache);
 
-maTache.setDescription("caca");
+// maTache.setDescription("caca");
 
-tachebdd.modifier(maTache);
-console.log(maTache);
+// laBdd.modifier(maTache);
+// console.log(maTache);
 
-tachebdd.terminer(maTache);
-tachebdd.getAll();
+// laBdd.terminer(maTache);
+// laBdd.getAll();
 
