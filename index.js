@@ -46,7 +46,7 @@ class TacheBDD {
     }
 /////////////////////////////////////////////////////////////////////
     terminer(tache) {
-        fetch(this.baseUrl +tache.getid()+tache.getTerminee,{
+        fetch(this.baseUrl +tache.getid()+ "/terminer",{
     
             method: "PUT",
             body: JSON.stringify(tache),
@@ -108,18 +108,21 @@ class tache{
 }
 /////////////////////////////////////////////////////////////
 
-let tache1 = new TacheBDD("http://localhost:9090/api/taches");
+let tachebdd = new TacheBDD("http://localhost:9090/api/taches");
 
-console.log(tache1)
-tache1.getAll();
+console.log(tachebdd)
+tachebdd.getAll();
 
 let maTache = new tache("efgyufuyzegfy");
 console.log(maTache);
 
-tache1.ajouter(maTache);
+tachebdd.ajouter(maTache);
 
 maTache.setDescription("caca");
 
-tache1.modifier(maTache);
+tachebdd.modifier(maTache);
 console.log(maTache);
+
+tachebdd.terminer(maTache);
+tachebdd.getAll();
 
