@@ -1,77 +1,93 @@
 class TacheBDD {
-
     baseUrl;
 
     constructor(baseUrl) {
         this.baseUrl = baseUrl;
     }
 
-    getAll() {
-        fetch(this.baseUrl)
-        .then(function(reponse) {
-            return reponse.json();
-        })
-        .then(function(reponseJson) {
-            console.log(reponseJson);
-        })
-        .catch(function(error) {
-            console.log(error);
-        }) 
-///////////////////////////////////////////////////////////////////////
+    async getAll() {
+        // if (this.lesTaches.length == 0) {
+            
+        let arrayTaches = await fetch(this.baseUrl)
+        .then((reponse) => {
+            if (reponse.status === 200) {
+                    return reponse.json();
+                }
+                // return reponse.json();
+            })
+            .then((json) => {
+                let lesTaches = [];
+                // console.log(json);
+                for (let i = 0; i < json.length; i++) {
+                    // console.log(json[i]);
+                    let nouvelleTache = new Tache(
+                        json[i].id,
+                        json[i].date,
+                        json[i].description,
+                        json[i].terminee
+                    );
+                    // console.log(nouvelleTache);
+                    lesTaches.push(nouvelleTache);
+                    // console.log(lesTaches);
+                    return lesTaches;
+                }
+            })
+            .catch((error) => console.log(error));
+
+        return arrayTaches;
+        ///////////////////////////////////////////////////////////////////////
     }
-    ajouter(tache) {
-        fetch(this.baseUrl,{
-    
+    enregistrer(tache) {
+        let descriptionTache = {
+            description: tache.description,
+        };
+
+        fetch(this.baseUrl, {
             method: "POST",
-            body: JSON.stringify(tache),
-            headers: {"Content-type":"application/json; charset=UTF-8"}
-
-        })
-        .catch(err => console.log(err))
-
+            body: JSON.stringify(descriptionTache),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+        }).catch((err) => console.log(err));
     }
-///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
 
     modifier(tache) {
-        fetch(this.baseUrl + tache.getid() ,{
-    
+        let descriptionTache = {
+            description: tache.description,
+        };
+
+        fetch(this.baseUrl + "/" + tache.getid(), {
             method: "PUT",
-            body: JSON.stringify(tache),
-            headers: {"Content-type":"application/json; charset=UTF-8"}
-
-        })
-        .catch(err => console.log(err))
-
-
+            body: JSON.stringify(descriptionTache),
+            headers: { "Content-type": "application/json; charset=UTF-8" },
+        }).catch((err) => console.log(err));
     }
-/////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
     terminer(tache) {
-        fetch(this.baseUrl +tache.getid() + "/terminer",{
-    
-            method: "PUT",
-            body: JSON.stringify(tache),
-            headers: {"Content-type":"application/json; charset=UTF-8"}
-
-        })
-        .catch(err => console.log(err))
-
+        // fetch(this.baseUrl +tache.getid() + "/terminer",{
+        //     method: "PUT",
+        //     body: JSON.stringify(tache),
+        //     headers: {"Content-type":"application/json; charset=UTF-8"}
+        // })
+        // .catch(err => console.log(err))
     }
-/////////////////////////////////////////////////////////////////////
-    supprimer(tache) {
-
-    }
+    /////////////////////////////////////////////////////////////////////
+    supprimer(tache) {}
 }
 /////////////////////////////////////////////////////////////////////
-class tache{
-   
+class Tache {
+    id;
+    date;
     description;
-    // terminee;
+    terminee;
 
-    constructor(description){
+    constructor(id, date, description, terminee) {
+        this.id = id;
+        this.date = date;
         this.description = description;
+        this.terminee = terminee;
     }
 
-
+    /*getters*/
     getid() {
         return this.id;
     }
@@ -85,7 +101,7 @@ class tache{
         return this.terminee;
     }
 
-
+    /*setters*/
     setDescription(description) {
         this.description = description;
     }
@@ -99,24 +115,35 @@ class tache{
         //à faire
     }
 
+    /*methodes*/
+
+    afficher() {}
 }
+
+/////////////////////////////////////////////////////////////
+// INTERFACE
+/////////////////////////////////////////////////////////////
+
 /////////////////////////////////////////////////////////////
 
 let laBdd = new TacheBDD("http://localhost:9090/api/taches");
 
-console.log(laBdd)
-laBdd.getAll();
+let desTaches = laBdd.getAll();
 
-let maTache = new tache("efgyufuyzegfy");
-console.log(maTache);
+console.log(desTaches);
 
-laBdd.ajouter(maTache);
 
+// let maTacheTest = desTaches[0];
+
+
+// let maTache = new Tache(desTaches[0].id, desTaches[0].date, desTaches[0].description, desTaches[0].terminee);
+// console.log(maTacheTest);
 // maTache.setDescription("caca");
+
+// laBdd.modifier(maTache);
+
 
 // laBdd.modifier(maTache);
 // console.log(maTache);
 
 // laBdd.terminer(maTache);
-// laBdd.getAll();
-
