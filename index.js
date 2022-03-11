@@ -1,6 +1,10 @@
 class TacheBDD {
 
-    baseUrl = "http://localhost:9090/api/taches/";
+    baseUrl;
+
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+    }
 
     getAll() {
         fetch(baseUrl)
