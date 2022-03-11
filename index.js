@@ -33,7 +33,7 @@ class TacheBDD {
 ///////////////////////////////////////////////////////////////////
 
     modifier(tache) {
-        fetch(this.baseUrl,{
+        fetch(this.baseUrl + tache.getid() ,{
     
             method: "PUT",
             body: JSON.stringify(tache),
@@ -76,20 +76,20 @@ class tache{
 
 
     getid() {
-
+        return this.id;
     }
     getdescription() {
-
+        return this.description;
     }
     getDate() {
-
+        return this.date;
     }
     getTerminee() {
-
+        return this.terminee;
     }
 
 
-    setdescription(description) {
+    setDescription(description) {
         this.description = description;
 
     }
@@ -102,15 +102,24 @@ class tache{
 
     }
     equals(other) {
-//à faire
+        //à faire
     }
 
 }
 /////////////////////////////////////////////////////////////
+
 let tache1 = new TacheBDD("http://localhost:9090/api/taches");
+
 console.log(tache1)
 tache1.getAll();
+
 let maTache = new tache("efgyufuyzegfy");
 console.log(maTache);
+
 tache1.ajouter(maTache);
+
+maTache.setDescription("caca");
+
+tache1.modifier(maTache);
+console.log(maTache);
 
