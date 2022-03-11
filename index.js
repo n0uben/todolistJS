@@ -19,17 +19,14 @@ class TacheBDD {
         }) 
     }
     ajouter(tache) {
-        // fetch(baseUrl,{
+        fetch(this.baseUrl,{
     
-        //     method: "POST",
-        //     body: JSON.stringify(_data),
-        //     headers: {"Content-type":"application/json; charset=UTF-8"}
+            method: "POST",
+            body: JSON.stringify(tache),
+            headers: {"Content-type":"application/json; charset=UTF-8"}
 
-        // .then(response => response.json()) 
-        // .then(json => console.log(json))
-        // .catch(err => console.log(err))
-
-    // })
+        })
+        .catch(err => console.log(err))
 
     }
 
@@ -46,11 +43,15 @@ class TacheBDD {
 
 class tache{
     id;
-    contenu;
     date;
+    contenu;
     terminee;
 
     constructor(contenu,terminee){
+        this.id = null;
+        this.date = null ;
+        this.contenu = contenu;
+        this.terminee = terminee;
 
     }
 
@@ -89,3 +90,6 @@ class tache{
 let tache1 = new TacheBDD("http://localhost:9090/api/taches");
 console.log(tache1)
 tache1.getAll();
+let maTache = new tache("efgyufuyzegfyq",true)
+console.log(maTache);
+tache1.ajouter(maTache);
