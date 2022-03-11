@@ -46,6 +46,14 @@ class TacheBDD {
     }
 /////////////////////////////////////////////////////////////////////
     terminer(tache) {
+        fetch(this.baseUrl +tache.getid()+tache.getTerminee,{
+    
+            method: "PUT",
+            body: JSON.stringify(tache),
+            headers: {"Content-type":"application/json; charset=UTF-8"}
+
+        })
+        .catch(err => console.log(err))
 
     }
 /////////////////////////////////////////////////////////////////////
@@ -105,3 +113,4 @@ tache1.getAll();
 let maTache = new tache("efgyufuyzegfy");
 console.log(maTache);
 tache1.ajouter(maTache);
+
