@@ -17,11 +17,12 @@ class TacheBDD {
         .catch(function(error) {
             console.log(error);
         }) 
+///////////////////////////////////////////////////////////////////////
     }
     ajouter(tache) {
         fetch(this.baseUrl,{
     
-            method: "POST",
+            method: "PUT",
             body: JSON.stringify(tache),
             headers: {"Content-type":"application/json; charset=UTF-8"}
 
@@ -29,18 +30,30 @@ class TacheBDD {
         .catch(err => console.log(err))
 
     }
+///////////////////////////////////////////////////////////////////
 
     modifier(tache) {
+        fetch(this.baseUrl,{
+    
+            method: "PUT",
+            body: JSON.stringify(tache),
+            headers: {"Content-type":"application/json; charset=UTF-8"}
+
+        })
+        .catch(err => console.log(err))
+
 
     }
+/////////////////////////////////////////////////////////////////////
     terminer(tache) {
 
     }
+/////////////////////////////////////////////////////////////////////
     supprimer(tache) {
 
     }
 }
-
+/////////////////////////////////////////////////////////////////////
 class tache{
    
     description;
@@ -85,43 +98,10 @@ class tache{
     }
 
 }
+/////////////////////////////////////////////////////////////
 let tache1 = new TacheBDD("http://localhost:9090/api/taches");
 console.log(tache1)
 tache1.getAll();
 let maTache = new tache("efgyufuyzegfy");
 console.log(maTache);
 tache1.ajouter(maTache);
-
-//EXEMPLE DE METODE PUT ET DELETE BORDEL
-/*function makePUTrequest() {
-    $.ajax({
-        url: 'test.html',
-        type: 'PUT',
-        success: function (result) {
-            // Do something with the result
-        }
-    });
-}
-
-function makeDELETErequest() {
-    $.ajax({
-        url: 'test.html',
-        type: 'DELETE',
-        success: function (result) {
-            // Do something with the result
-        }
-    });
-}
-</script>
-
-<body>
-<button onclick="makePUTrequest()">
-    Click for PUT request
-</button>
-<button onclick="makeDELETErequest()">
-    Click for DELETE request
-</button>
-</body>
-
-</html>
-*/
