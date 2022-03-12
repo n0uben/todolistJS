@@ -7,7 +7,7 @@ class TacheBDD {
 
     getAll() {
 
-        let lesTaches = [];
+        // let lesTaches = [];
             
         fetch(this.baseUrl)
         .then((reponse) => {
@@ -23,7 +23,9 @@ class TacheBDD {
                         json[i].description,
                         json[i].terminee
                     );
-                    lesTaches.push(nouvelleTache);
+
+                    // lesTaches.push(nouvelleTache);
+
                     nouvelleTache.afficher();
                 }
             })
@@ -125,7 +127,9 @@ class Tache {
         formCheckLabel.className = "form-check-label";
         
         formCheckInput.type = "checkbox";
+        formCheckInput.id = "checkbox" + this.getid();
 
+        formCheckLabel.setAttribute("for", "checkbox" + this.getid())
 
         listeTaches.appendChild(col);
         col.appendChild(formCheck);
