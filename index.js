@@ -134,19 +134,22 @@ class Tache {
 
         formCheckLabel.setAttribute("for", "checkbox" + this.getid())
 
-        listeTaches.appendChild(col);
+        if (this.getTerminee()) {
+            //on insere les taches terminees a la fin
+            listeTaches.appendChild(col);
+            //mise en forme taches terminees
+            formCheckInput.setAttribute("checked", true);
+            formCheckInput.setAttribute("disabled", true);
+            formCheckLabel.classList.add("text-decoration-line-through")
+        } else {
+            // taches en cours en premier
+            listeTaches.prepend(col);
+        }
         col.appendChild(formCheck);
         formCheck.appendChild(formCheckInput);
         formCheck.appendChild(formCheckLabel);
 
-        formCheckLabel.innerHTML = this.description;
-
-        //si la tache est terminée, on la coche, désactive et barre
-        if (this.getTerminee()) {
-            formCheckInput.setAttribute("checked", true);
-            formCheckInput.setAttribute("disabled", true);
-            formCheckLabel.classList.add("text-decoration-line-through")
-        }
+        formCheckLabel.innerHTML = this.description;    
     }
 }
 
