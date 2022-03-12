@@ -7,6 +7,10 @@ class TacheBDD {
 
     getAll() {
 
+        //vide conteneur taches avant de le re-remplir
+        let listeTaches = document.getElementById("listeTaches");
+        listeTaches.innerHTML = "";
+
         // let lesTaches = [];
             
         fetch(this.baseUrl)
@@ -151,30 +155,30 @@ class Tache {
 // INTERFACE
 /////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////
-
 let laBdd = new TacheBDD("http://localhost:9090/api/taches");
 
-// let desTaches = laBdd.getAll();
+/* clic bouton tout */
+let boutonTout = document.getElementById("afficherTout");
+boutonTout.addEventListener("click", () => laBdd.getAll());
 
+/* clic bouton en cours */
+let boutonEnCours = document.getElementById("afficherEnCours");
+//modifier getall() pour pouvoir obtenir seulement les taches en cours
+
+
+/* clic bouton terminées */
+let boutonTerminees = document.getElementById("afficherTerminees");
+//modifier getall() pour pouvoir obtenir seulement les taches terminées
+
+/* clic bouton ajouter une tache */ 
+let boutonAjouter = document.getElementById("button-addon");
+// besoin fonction pour afficher les taches afficher crées en BDD
+
+/* clic bouton supprimer */
+//todo : créer un bouton supprimer lol
+
+
+/////////////////////////////////////////////////////////////
+
+// initialise l’interface avec la liste de toutes les taches
 laBdd.getAll();
-
-// console.log(test);
-
-// console.log(desTaches);
-
-
-// let maTacheTest = desTaches[0];
-
-
-// let maTache = new Tache(desTaches[0].id, desTaches[0].date, desTaches[0].description, desTaches[0].terminee);
-// console.log(maTacheTest);
-// maTache.setDescription("caca");
-
-// laBdd.modifier(maTache);
-
-
-// laBdd.modifier(maTache);
-// console.log(maTache);
-
-// laBdd.terminer(maTache);
