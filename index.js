@@ -5,36 +5,30 @@ class TacheBDD {
         this.baseUrl = baseUrl;
     }
 
-    async getAll() {
-        // if (this.lesTaches.length == 0) {
+    getAll() {
+
+        let lesTaches = [];
             
-        let arrayTaches = await fetch(this.baseUrl)
+        fetch(this.baseUrl)
         .then((reponse) => {
             if (reponse.status === 200) {
                     return reponse.json();
                 }
-                // return reponse.json();
             })
             .then((json) => {
-                let lesTaches = [];
-                // console.log(json);
                 for (let i = 0; i < json.length; i++) {
-                    // console.log(json[i]);
                     let nouvelleTache = new Tache(
                         json[i].id,
                         json[i].date,
                         json[i].description,
                         json[i].terminee
                     );
-                    // console.log(nouvelleTache);
                     lesTaches.push(nouvelleTache);
-                    // console.log(lesTaches);
-                    return lesTaches;
+                    nouvelleTache.afficher();
                 }
             })
-            .catch((error) => console.log(error));
+            .catch((error) => console.error(error));
 
-        return arrayTaches;
         ///////////////////////////////////////////////////////////////////////
     }
     enregistrer(tache) {
@@ -117,7 +111,29 @@ class Tache {
 
     /*methodes*/
 
-    afficher() {}
+    afficher() {
+        let listeTaches = document.getElementById("listeTaches");
+
+        let col = document.createElement("div");
+        let formCheck = document.createElement("div");
+        let formCheckInput = document.createElement("input");
+        let formCheckLabel = document.createElement("label");
+
+        col.className = "col-12 p-4 mb-2";
+        formCheck.className = "form-check";
+        formCheckInput.className = "form-check-input";
+        formCheckLabel.className = "form-check-label";
+        
+        formCheckInput.type = "checkbox";
+
+
+        listeTaches.appendChild(col);
+        col.appendChild(formCheck);
+        formCheck.appendChild(formCheckInput);
+        formCheck.appendChild(formCheckLabel);
+
+        formCheckLabel.innerHTML = this.description;
+    }
 }
 
 /////////////////////////////////////////////////////////////
@@ -128,9 +144,13 @@ class Tache {
 
 let laBdd = new TacheBDD("http://localhost:9090/api/taches");
 
-let desTaches = laBdd.getAll();
+// let desTaches = laBdd.getAll();
 
-console.log(desTaches);
+laBdd.getAll();
+
+// console.log(test);
+
+// console.log(desTaches);
 
 
 // let maTacheTest = desTaches[0];
