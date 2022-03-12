@@ -158,7 +158,7 @@ let laBdd = new TacheBDD("http://localhost:9090/api/taches");
 
 /* clic bouton tout */
 let boutonTout = document.getElementById("afficherTout");
-boutonTout.addEventListener("click", () => laBdd.getAll());
+boutonTout.addEventListener("click", () => laBdd.renderTaches());
 
 /* clic bouton en cours */
 let boutonEnCours = document.getElementById("afficherEnCours");
