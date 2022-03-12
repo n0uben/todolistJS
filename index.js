@@ -5,37 +5,36 @@ class TacheBDD {
         this.baseUrl = baseUrl;
     }
 
-    getAll() {
+    async getAll() {
 
-        //vide conteneur taches avant de le re-remplir
+        let reponse = await fetch(this.baseUrl);
+        let json = await reponse.json();
+    
+        return json;
+
+    }
+
+    renderTaches() {
+
+        //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
 
-        // let lesTaches = [];
-            
-        fetch(this.baseUrl)
-        .then((reponse) => {
-            if (reponse.status === 200) {
-                    return reponse.json();
-                }
-            })
+        // recupere toutes les taches et les insere dans le HTML
+        this.getAll()
             .then((json) => {
-                for (let i = 0; i < json.length; i++) {
+                for (const element of json) {
+                    
                     let nouvelleTache = new Tache(
-                        json[i].id,
-                        json[i].date,
-                        json[i].description,
-                        json[i].terminee
+                        element.id,
+                        element.date,
+                        element.description,
+                        element.terminee
                     );
-
-                    // lesTaches.push(nouvelleTache);
-
                     nouvelleTache.afficher();
                 }
             })
             .catch((error) => console.error(error));
-
-        ///////////////////////////////////////////////////////////////////////
     }
     enregistrer(tache) {
         let descriptionTache = {
@@ -181,4 +180,4 @@ let boutonAjouter = document.getElementById("button-addon");
 /////////////////////////////////////////////////////////////
 
 // initialise l’interface avec la liste de toutes les taches
-laBdd.getAll();
+laBdd.renderTaches();
