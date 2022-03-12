@@ -137,6 +137,13 @@ class Tache {
         formCheck.appendChild(formCheckLabel);
 
         formCheckLabel.innerHTML = this.description;
+
+        //si la tache est terminée, on la coche, désactive et barre
+        if (this.getTerminee()) {
+            formCheckInput.setAttribute("checked", true);
+            formCheckInput.setAttribute("disabled", true);
+            formCheckLabel.classList.add("text-decoration-line-through")
+        }
     }
 }
 
