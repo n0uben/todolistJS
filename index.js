@@ -1,11 +1,7 @@
 class TacheBDD {
-    baseUrl;
+    static baseUrl = "http://localhost:9090/api/taches";
 
-    constructor(baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
-    async getAll() {
+    static async getAll() {
 
         let reponse = await fetch(this.baseUrl);
         let json = await reponse.json();
@@ -14,7 +10,7 @@ class TacheBDD {
 
     }
 
-    renderTaches() {
+    static renderTaches() {
 
         //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
@@ -36,20 +32,28 @@ class TacheBDD {
             })
             .catch((error) => console.error(error));
     }
-    enregistrer(tache) {
+    static refreshInterface() {
+        //on vide l'input et on rafraichit la liste des taches
+        document.getElementById("inputAjouter").value = "";
+        this.renderTaches();
+    }
+    static async enregistrer(tache) {
         let descriptionTache = {
             description: tache.description,
         };
 
-        fetch(this.baseUrl, {
+        let tacheEnregistree = await fetch(this.baseUrl, {
             method: "POST",
             body: JSON.stringify(descriptionTache),
             headers: { "Content-type": "application/json; charset=UTF-8" },
         }).catch((err) => console.log(err));
+
+        return tacheEnregistree;
+
     }
     ///////////////////////////////////////////////////////////////////
 
-    modifier(tache) {
+    static modifier(tache) {
         let descriptionTache = {
             description: tache.description,
         };
@@ -61,7 +65,7 @@ class TacheBDD {
         }).catch((err) => console.log(err));
     }
     /////////////////////////////////////////////////////////////////////
-    terminer(tache) {
+    static terminer(tache) {
         // fetch(this.baseUrl +tache.getid() + "/terminer",{
         //     method: "PUT",
         //     body: JSON.stringify(tache),
@@ -70,7 +74,7 @@ class TacheBDD {
         // .catch(err => console.log(err))
     }
     /////////////////////////////////////////////////////////////////////
-    supprimer(tache) {}
+    static supprimer(tache) {}
 }
 /////////////////////////////////////////////////////////////////////
 class Tache {
@@ -157,24 +161,43 @@ class Tache {
 // INTERFACE
 /////////////////////////////////////////////////////////////
 
-let laBdd = new TacheBDD("http://localhost:9090/api/taches");
+// class interfaceTaches {
+
+//     static test;
+
+//     static afficherTout() {
+//         console.log("coucou");
+//     }
+// }
+
 
 /* clic bouton tout */
-let boutonTout = document.getElementById("afficherTout");
-boutonTout.addEventListener("click", () => laBdd.renderTaches());
+const boutonTout = document.getElementById("afficherTout");
+boutonTout.addEventListener("click", () => TacheBDD.renderTaches());
 
 /* clic bouton en cours */
-let boutonEnCours = document.getElementById("afficherEnCours");
+const boutonEnCours = document.getElementById("afficherEnCours");
 //modifier getall() pour pouvoir obtenir seulement les taches en cours
 
 
 /* clic bouton terminées */
-let boutonTerminees = document.getElementById("afficherTerminees");
+const boutonTerminees = document.getElementById("afficherTerminees");
 //modifier getall() pour pouvoir obtenir seulement les taches terminées
 
 /* clic bouton ajouter une tache */ 
-let boutonAjouter = document.getElementById("button-addon");
-// besoin fonction pour afficher les taches afficher crées en BDD
+const boutonAjouter = document.getElementById("button-addon");
+const inputAjouter = document.getElementById("inputAjouter");
+
+boutonAjouter.addEventListener("click", () => {
+    const value = inputAjouter.value;
+    const regex = /[a-z0-9]{1,255}/gi;
+    if (value.match(regex) ) {
+        const maTache = new Tache(null, null, inputAjouter.value, null);
+        console.log(maTache);
+        TacheBDD.enregistrer(maTache).then(() => TacheBDD.refreshInterface());
+        console.log(inputAjouter.value);
+    }
+});
 
 /* clic bouton supprimer */
 //todo : créer un bouton supprimer lol
@@ -183,4 +206,4 @@ let boutonAjouter = document.getElementById("button-addon");
 /////////////////////////////////////////////////////////////
 
 // initialise l’interface avec la liste de toutes les taches
-laBdd.renderTaches();
+TacheBDD.renderTaches();
