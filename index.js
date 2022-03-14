@@ -11,8 +11,7 @@ class TacheBDD {
     }
 
     static afficherTaches() {
-        this.getAll()
-        .then(() => TacheBDD.refreshInterface())
+       
         //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
@@ -75,14 +74,16 @@ class TacheBDD {
         // .catch(err => console.log(err))
     }
     /////////////////////////////////////////////////////////////////////
-    static supprimer(tache) {
-        fetch(this.baseUrl +tache.getid(),{
+    static async supprimer(tache) {
+        let tacheSupprimer = await fetch(this.baseUrl +tache.getid(),{
                 method: "DELETE",
                 body: JSON.stringify(tache),
                 headers: {"Content-type":"application/json; charset=UTF-8"}
             })
             .catch(err => console.log(err))
+            return tacheSupprimer;
     }
+        
 }
 /////////////////////////////////////////////////////////////////////
 class Tache {
@@ -207,6 +208,7 @@ boutonAjouter.addEventListener("click", () => {
     }
 });
 
+
 /* clic bouton supprimer */
 //todo : créer un bouton supprimer lol
 
@@ -214,5 +216,6 @@ boutonAjouter.addEventListener("click", () => {
 /////////////////////////////////////////////////////////////
 
 // initialise l’interface avec la liste de toutes les taches
+//const maTache2 = new Tache(1, null, null, null);
 TacheBDD.afficherTaches();
-T
+//TacheBDD.supprimer(maTache2);
