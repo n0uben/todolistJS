@@ -10,8 +10,8 @@ class TacheBDD {
 
     }
 
-    static renderTaches() {
-
+    static afficherTaches() {
+        .then(() => TacheBDD.refreshInterface())
         //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
@@ -35,11 +35,11 @@ class TacheBDD {
     static refreshInterface() {
         //on vide l'input et on rafraichit la liste des taches
         document.getElementById("inputAjouter").value = "";
-        this.renderTaches();
+        this.afficherTaches();
     }
     static async enregistrer(tache) {
         let descriptionTache = {
-            description: tache.description,
+            description: tache.description,//à commenter
         };
 
         let tacheEnregistree = await fetch(this.baseUrl, {
@@ -74,7 +74,14 @@ class TacheBDD {
         // .catch(err => console.log(err))
     }
     /////////////////////////////////////////////////////////////////////
-    static supprimer(tache) {}
+    static supprimer(tache) {
+        fetch(this.baseUrl +tache.getid(),{
+                method: "DELETE",
+                body: JSON.stringify(tache),
+                headers: {"Content-type":"application/json; charset=UTF-8"}
+            })
+            .catch(err => console.log(err))
+    }
 }
 /////////////////////////////////////////////////////////////////////
 class Tache {
@@ -173,7 +180,7 @@ class Tache {
 
 /* clic bouton tout */
 const boutonTout = document.getElementById("afficherTout");
-boutonTout.addEventListener("click", () => TacheBDD.renderTaches());
+boutonTout.addEventListener("click", () => TacheBDD.afficherTaches());
 
 /* clic bouton en cours */
 const boutonEnCours = document.getElementById("afficherEnCours");
@@ -194,7 +201,7 @@ boutonAjouter.addEventListener("click", () => {
     if (value.match(regex) ) {
         const maTache = new Tache(null, null, inputAjouter.value, null);
         console.log(maTache);
-        TacheBDD.enregistrer(maTache).then(() => TacheBDD.refreshInterface());
+        TacheBDD.enregistrer().then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
         console.log(inputAjouter.value);
     }
 });
@@ -206,4 +213,5 @@ boutonAjouter.addEventListener("click", () => {
 /////////////////////////////////////////////////////////////
 
 // initialise l’interface avec la liste de toutes les taches
-TacheBDD.renderTaches();
+TacheBDD.afficherTaches();
+T
