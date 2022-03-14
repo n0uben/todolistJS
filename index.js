@@ -11,6 +11,7 @@ class TacheBDD {
     }
 
     static afficherTaches() {
+        this.getAll()
         .then(() => TacheBDD.refreshInterface())
         //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
