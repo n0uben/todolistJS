@@ -77,11 +77,17 @@ class TacheBDD {
     static async supprimer(tache) {
         let tacheSupprimer = await fetch(this.baseUrl +tache.getid(),{
                 method: "DELETE",
-                body: JSON.stringify(tache),
+                
                 headers: {"Content-type":"application/json; charset=UTF-8"}
             })
+            .then(function(response){
+                return response;
+
+            })
             .catch(err => console.log(err))
-            return tacheSupprimer;
+        )
+
+            
     }
         
 }
@@ -207,6 +213,11 @@ boutonAjouter.addEventListener("click", () => {
         console.log(inputAjouter.value);
     }
 });
+boutonSupprimer.addEventListener("click", () => {
+    const value = inputAjouter.value; 
+        TacheBDD.Supprimer.then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
+        console.log(Supprimer.value);
+    
 
 
 /* clic bouton supprimer */
