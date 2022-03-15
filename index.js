@@ -1,5 +1,5 @@
 class TacheBDD {
-    static baseUrl = "http://localhost:9090/api/taches";
+    static baseUrl = "http://localhost:9090/api/taches/";
 
     static async getAll() {
 
@@ -66,16 +66,14 @@ class TacheBDD {
     }
     /////////////////////////////////////////////////////////////////////
     static terminer(tache) {
-        // fetch(this.baseUrl +tache.getid() + "/terminer",{
-        //     method: "PUT",
-        //     body: JSON.stringify(tache),
-        //     headers: {"Content-type":"application/json; charset=UTF-8"}
-        // })
-        // .catch(err => console.log(err))
+        fetch(this.baseUrl + tache.getid() + "/terminer",{
+            method: "PUT",
+        })
+        .catch(err => console.log(err))
     }
     /////////////////////////////////////////////////////////////////////
     static async supprimer(tache) {
-        let tacheSupprimer = await fetch(this.baseUrl +tache.getid(),{
+        let tacheSupprimer = await fetch(this.baseUrl + tache.getid(),{
                 method: "DELETE",
                 
                 headers: {"Content-type":"application/json; charset=UTF-8"}
@@ -85,9 +83,7 @@ class TacheBDD {
 
             })
             .catch(err => console.log(err))
-        )
-
-            
+        
     }
         
 }
@@ -124,6 +120,7 @@ class Tache {
         this.description = description;
     }
     setTerminee(terminee) {
+        
         this.terminee = terminee;
     }
     toString() {
@@ -147,6 +144,8 @@ class Tache {
         formCheck.className = "form-check";
         formCheckInput.className = "form-check-input";
         formCheckLabel.className = "form-check-label";
+
+        // let mabalise = `<div class="col">${Tache.id}</div>`;
         
         formCheckInput.type = "checkbox";
         formCheckInput.id = "checkbox" + this.getid();
@@ -165,6 +164,7 @@ class Tache {
             listeTaches.prepend(col);
         }
         col.appendChild(formCheck);
+
         formCheck.appendChild(formCheckInput);
         formCheck.appendChild(formCheckLabel);
 
@@ -213,12 +213,13 @@ boutonAjouter.addEventListener("click", () => {
         console.log(inputAjouter.value);
     }
 });
+
 boutonSupprimer.addEventListener("click", () => {
     const value = inputAjouter.value; 
-        TacheBDD.Supprimer.then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
+        TacheBDD.Supprimer().then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
         console.log(Supprimer.value);
     
-
+});
 
 /* clic bouton supprimer */
 //todo : créer un bouton supprimer lol
