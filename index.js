@@ -137,7 +137,7 @@ class Tache {
 
     /*methodes*/
 
-    afficher() {
+    /*afficher() {
         let listeTaches = document.getElementById("listeTaches");
 
         let tacheCochee = "";
@@ -158,7 +158,47 @@ class Tache {
 
         listeTaches.innerHTML += htmlTache;
     }
+}*/
+
+messageAvantSuppression(id) {
+    alert('eeeeee');
+    
+    console.log("erreur");
+
+    confirmationSup=true;
+    if(confirmationSup=confirm("voulez vous sup?")){
+        TacheBDD.supprimer(id);
+    }
+    else{
+        alert("pas de supp");
+    }
 }
+
+afficher() {
+    let listeTaches = document.getElementById("listeTaches");
+
+    let tacheCochee = "";
+    let tacheDesactivee = "";
+
+    if (this.getTerminee()) {
+        tacheCochee = "checked";
+        tacheDesactivee = "disabled";
+    }
+
+    
+
+    let htmlTache = `<div class="col-12 p-4 mb-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee}>
+            <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
+            <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(supprimer${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
+        </div>
+    </div>`;
+
+    listeTaches.innerHTML += htmlTache;
+}
+}
+
 
 /////////////////////////////////////////////////////////////
 // INTERFACE
