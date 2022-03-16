@@ -207,12 +207,14 @@ boutonSupprimer.addEventListener("click", () => {
 
 
 /* clic bouton supprimer */
-//todo : créer un bouton supprimer lol
-
+//todo
 
 /////////////////////////////////////////////////////////////
 
 // initialise l’interface avec la liste de toutes les taches
-//const maTache2 = new Tache(1, null, null, null);
 TacheBDD.afficherTaches();
+
+
+
+//const maTache2 = new Tache(1, null, null, null);
 //TacheBDD.supprimer(maTache2);
