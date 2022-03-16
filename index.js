@@ -213,6 +213,7 @@ const boutonTerminees = document.getElementById("afficherTerminees");
 /* clic bouton ajouter une tache */ 
 const boutonAjouter = document.getElementById("button-addon");
 const inputAjouter = document.getElementById("inputAjouter");
+const boutonSupprimer = document.getElementById("supprimer${this.getid()}")
 
 boutonAjouter.addEventListener("click", () => {
     const value = inputAjouter.value;
@@ -240,5 +241,6 @@ boutonSupprimer.addEventListener("click", () => {
 
 // initialise l’interface avec la liste de toutes les taches
 //const maTache2 = new Tache(1, null, null, null);
-TacheBDD.afficherTaches();
+//TacheBDD.afficherTaches();
+
 //TacheBDD.supprimer(maTache2);
