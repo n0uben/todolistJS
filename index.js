@@ -1,5 +1,5 @@
 class TacheBDD {
-    static baseUrl = "http://localhost:9090/api/taches";
+    static baseUrl = "http://localhost:9090/api/taches/";
 
     static async getAll() {
 
@@ -7,7 +7,6 @@ class TacheBDD {
         let json = await reponse.json();
     
         return json;
-
     }
 
     static afficherTaches() {
@@ -66,28 +65,28 @@ class TacheBDD {
     }
     /////////////////////////////////////////////////////////////////////
     static terminer(tache) {
-        // fetch(this.baseUrl +tache.getid() + "/terminer",{
-        //     method: "PUT",
-        //     body: JSON.stringify(tache),
-        //     headers: {"Content-type":"application/json; charset=UTF-8"}
-        // })
-        // .catch(err => console.log(err))
+        fetch(this.baseUrl + tache.getid() + "/terminer",{
+            method: "PUT",
+        })
+        .catch(err => console.log(err))
     }
     /////////////////////////////////////////////////////////////////////
     static async supprimer(tache) {
-        let tacheSupprimer = await fetch(this.baseUrl +tache.getid(),{
+        let tacheSupprimer = await fetch(this.baseUrl + tache.getid(),{
                 method: "DELETE",
                 
                 headers: {"Content-type":"application/json; charset=UTF-8"}
             })
             .then(function(response){
-                return response;
+                if(response.ok){
+                    const tacheSupprimer = document.getElementById("supprimer${this.getid()}")
+                    tacheSupprimer.remove()
+                }
+                
 
             })
             .catch(err => console.log(err))
-        )
-
-            
+        
     }
         
 }
@@ -121,9 +120,15 @@ class Tache {
 
     /*setters*/
     setDescription(description) {
-        this.description = description;
+        const regex = /[a-z0-9]{1,255}/gi;
+
+        while(description.notmatch(regex) ) {
+        alert("entrer une description correct");
     }
+    return description
+}
     setTerminee(terminee) {
+        
         this.terminee = terminee;
     }
     toString() {
@@ -142,16 +147,19 @@ class Tache {
         let formCheck = document.createElement("div");
         let formCheckInput = document.createElement("input");
         let formCheckLabel = document.createElement("label");
+        let btnSupprimer = document.createElement("button");
 
         col.className = "col-12 p-4 mb-2";
         formCheck.className = "form-check";
         formCheckInput.className = "form-check-input";
         formCheckLabel.className = "form-check-label";
         
+        // let mabalise = `<div class="col">${Tache.id}</div>`;
+        
         formCheckInput.type = "checkbox";
         formCheckInput.id = "checkbox" + this.getid();
 
-        formCheckLabel.setAttribute("for", "checkbox" + this.getid())
+        formCheckLabel.setAttribute("for", "checkbox" + this.getid());
 
         if (this.getTerminee()) {
             //on insere les taches terminees a la fin
@@ -164,11 +172,14 @@ class Tache {
             // taches en cours en premier
             listeTaches.prepend(col);
         }
-        col.appendChild(formCheck);
+        col.appendChild(formCheck);   
         formCheck.appendChild(formCheckInput);
         formCheck.appendChild(formCheckLabel);
 
-        formCheckLabel.innerHTML = this.description;    
+        formCheckLabel.innerHTML = this.description;
+        
+        formCheck.innerHTML += ` <button type="button" id="supprimer${this.getid()}" class="btn btn-outline-danger">Supprimer</button>`;
+        
     }
 }
 
@@ -213,12 +224,13 @@ boutonAjouter.addEventListener("click", () => {
         console.log(inputAjouter.value);
     }
 });
+
 boutonSupprimer.addEventListener("click", () => {
     const value = inputAjouter.value; 
-        TacheBDD.Supprimer.then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
+        TacheBDD.Supprimer().then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
         console.log(Supprimer.value);
     
-
+});
 
 /* clic bouton supprimer */
 //todo : créer un bouton supprimer lol
