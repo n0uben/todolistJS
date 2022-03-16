@@ -74,14 +74,16 @@ class TacheBDD {
         // .catch(err => console.log(err))
     }
     /////////////////////////////////////////////////////////////////////
-    static async supprimer(tache) {
-        let tacheSupprimer = await fetch(this.baseUrl +tache.getid(),{
+    static supprimer(idTache) {
+        console.log(this.baseUrl+"/"+idTache);
+        fetch(this.baseUrl+"/"+idTache,{
                 method: "DELETE",
                 
                 headers: {"Content-type":"application/json; charset=UTF-8"}
             })
-            .then(function(response){
-                return response;
+            .then(function(){
+                TacheBDD.refreshInterface();//une fois la promesse reçu alors->refresh interface
+                
 
             })
             .catch(err => console.log(err))
@@ -150,7 +152,7 @@ class Tache {
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee}>
                 <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
-                <button type="button" id="supprimer${this.getid()}" onclick="TacheBDD.supprimer()" class="btn btn-outline-danger">Supprimer</button>
+                <button type="button" id="supprimer${this.getid()}" onclick="TacheBDD.supprimer(${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
             </div>
         </div>`;
 
@@ -188,7 +190,7 @@ const boutonTerminees = document.getElementById("afficherTerminees");
 /* clic bouton ajouter une tache */ 
 const boutonAjouter = document.getElementById("button-addon");
 const inputAjouter = document.getElementById("inputAjouter");
-const boutonSupprimer = document.getElementById("supprimer${this.getid()}")
+const boutonSupprimer = document.getElementById("supprimer${this.getid()}");
 
 boutonAjouter.addEventListener("click", () => {
     const value = inputAjouter.value;
@@ -200,22 +202,12 @@ boutonAjouter.addEventListener("click", () => {
         console.log(inputAjouter.value);
     }
 });
-boutonSupprimer.addEventListener("click", () => {
-    const value = inputAjouter.value; 
-        TacheBDD.Supprimer.then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
-        console.log(Supprimer.value);
-});
 
-
-/* clic bouton supprimer */
-//todo
 
 /////////////////////////////////////////////////////////////
 
 // initialise l’interface avec la liste de toutes les taches
 TacheBDD.afficherTaches();
-
-
 
 //const maTache2 = new Tache(1, null, null, null);
 //TacheBDD.supprimer(maTache2);
