@@ -85,7 +85,7 @@ class TacheBDD {
 
             })
             .catch(err => console.log(err))
-        )
+        
 
             
     }
@@ -142,16 +142,19 @@ class Tache {
         let formCheck = document.createElement("div");
         let formCheckInput = document.createElement("input");
         let formCheckLabel = document.createElement("label");
+        let btnSupprimer = document.createElement("button");
 
         col.className = "col-12 p-4 mb-2";
         formCheck.className = "form-check";
         formCheckInput.className = "form-check-input";
         formCheckLabel.className = "form-check-label";
         
+        // let mabalise = `<div class="col">${Tache.id}</div>`;
+        
         formCheckInput.type = "checkbox";
         formCheckInput.id = "checkbox" + this.getid();
 
-        formCheckLabel.setAttribute("for", "checkbox" + this.getid())
+        formCheckLabel.setAttribute("for", "checkbox" + this.getid());
 
         if (this.getTerminee()) {
             //on insere les taches terminees a la fin
@@ -164,11 +167,14 @@ class Tache {
             // taches en cours en premier
             listeTaches.prepend(col);
         }
-        col.appendChild(formCheck);
+        col.appendChild(formCheck);   
         formCheck.appendChild(formCheckInput);
         formCheck.appendChild(formCheckLabel);
 
-        formCheckLabel.innerHTML = this.description;    
+        formCheckLabel.innerHTML = this.description;
+        
+        formCheck.innerHTML += ` <button type="button" id="supprimer${this.getid()}" class="btn btn-outline-danger">Supprimer</button>`;
+        
     }
 }
 
@@ -217,7 +223,7 @@ boutonSupprimer.addEventListener("click", () => {
     const value = inputAjouter.value; 
         TacheBDD.Supprimer.then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
         console.log(Supprimer.value);
-    
+});
 
 
 /* clic bouton supprimer */
