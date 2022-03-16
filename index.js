@@ -78,7 +78,11 @@ class TacheBDD {
                 headers: {"Content-type":"application/json; charset=UTF-8"}
             })
             .then(function(response){
-                return response;
+                if(response.ok){
+                    const tacheSupprimer = document.getElementById("supprimer${this.getid()}")
+                    tacheSupprimer.remove()
+                }
+                
 
             })
             .catch(err => console.log(err))
@@ -116,8 +120,13 @@ class Tache {
 
     /*setters*/
     setDescription(description) {
-        this.description = description;
+        const regex = /[a-z0-9]{1,255}/gi;
+
+        while(description.notmatch(regex) ) {
+        alert("entrer une description correct");
     }
+    return description
+}
     setTerminee(terminee) {
         
         this.terminee = terminee;
