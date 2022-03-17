@@ -160,14 +160,14 @@ class Tache {
     }
 }*/
 
-messageAvantSuppression(id) {
-    alert('eeeeee');
+static messageAvantSuppression(id) {
     
-    console.log("erreur");
+    let confirmationSup = confirm("voulez vous supprimer?");
 
-    confirmationSup=true;
-    if(confirmationSup=confirm("voulez vous sup?")){
+    if(confirmationSup){
+        console.log("erreur coouuucouuu");
         TacheBDD.supprimer(id);
+        console.log("erreur2");
     }
     else{
         alert("pas de supp");
@@ -191,7 +191,7 @@ afficher() {
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee}>
             <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
-            <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(supprimer${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
+            <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
         </div>
     </div>`;
 
