@@ -38,15 +38,18 @@ class TacheBDD {
         this.afficherTaches();
     }
     static async enregistrer(tache) {
+        console.log("proouut");
         let descriptionTache = {
-            description: tache.description,//à commenter
+            description: tache.description
         };
+        console.log(descriptionTache);
 
         let tacheEnregistree = await fetch(this.baseUrl, {
             method: "POST",
             body: JSON.stringify(descriptionTache),
             headers: { "Content-type": "application/json; charset=UTF-8" },
         }).catch((err) => console.log(err));
+        console.log("apres la function?");
 
         return tacheEnregistree;
 
@@ -230,16 +233,14 @@ const boutonTerminees = document.getElementById("afficherTerminees");
 /* clic bouton ajouter une tache */ 
 const boutonAjouter = document.getElementById("button-addon");
 const inputAjouter = document.getElementById("inputAjouter");
-const boutonSupprimer = document.getElementById("supprimer${this.getid()}");
+//const boutonSupprimer = document.getElementById("supprimer${this.getid()}");
 
 boutonAjouter.addEventListener("click", () => {
     const value = inputAjouter.value;
     const regex = /[a-z0-9]{1,255}/gi;
     if (value.match(regex) ) {
         const maTache = new Tache(null, null, inputAjouter.value, null);
-        console.log(maTache);
-        TacheBDD.enregistrer().then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
-        console.log(inputAjouter.value);
+        TacheBDD.enregistrer(maTache).then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
     }
 });
 
