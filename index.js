@@ -69,12 +69,21 @@ class TacheBDD {
     }
     /////////////////////////////////////////////////////////////////////
     static terminer(tache) {
-        // fetch(this.baseUrl +tache.getid() + "/terminer",{
-        //     method: "PUT",
-        //     body: JSON.stringify(tache),
-        //     headers: {"Content-type":"application/json; charset=UTF-8"}
-        // })
-        // .catch(err => console.log(err))
+        console.log("tes dans terminer mon gars"+tache);
+        fetch(this.baseUrl +"/"+tache+ "/terminer",{
+            method: "PUT",
+            body: JSON.stringify(tache),
+            headers: {"Content-type":"application/json; charset=UTF-8"}
+            
+        })
+        .then(function(response){
+            console.log(response);
+            console.log("tas recup la reponse franchement tes un bg");
+            
+            TacheBDD.refreshInterface();
+        })
+        .catch(err => console.log(err))
+        console.log("OOOOUUAAA");
     }
     /////////////////////////////////////////////////////////////////////
     static supprimer(idTache) {
@@ -92,7 +101,6 @@ class TacheBDD {
             .catch(err => console.log(err))
         
 
-            
     }
         
 }
@@ -192,7 +200,7 @@ afficher() {
 
     let htmlTache = `<div class="col-12 p-4 mb-2">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee}>
+            <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
             <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
             <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
         </div>
@@ -227,7 +235,7 @@ const boutonEnCours = document.getElementById("afficherEnCours");
 
 
 /* clic bouton terminées */
-const boutonTerminees = document.getElementById("afficherTerminees");
+const boutonAffcherTerminees = document.getElementById("afficherTerminees");
 //modifier getall() pour pouvoir obtenir seulement les taches terminées
 
 /* clic bouton ajouter une tache */ 
