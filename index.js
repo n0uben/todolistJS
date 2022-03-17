@@ -57,19 +57,28 @@ class TacheBDD {
     ///////////////////////////////////////////////////////////////////
 
     static modifier(tache) {
-        let descriptionTache = {
-            description: tache.description,
-        };
 
-        fetch(this.baseUrl + "/" + tache.getid(), {
+        let nouvelleDescription=prompt("quelle est la nouvelle Tâche ?");
+        //console.log(nouvelleDescription);
+        
+        let descriptionTache = {
+            description: nouvelleDescription,
+        };
+        fetch(this.baseUrl + "/" + tache, {
             method: "PUT",
             body: JSON.stringify(descriptionTache),
             headers: { "Content-type": "application/json; charset=UTF-8" },
-        }).catch((err) => console.log(err));
+        })
+        .then(function(response){
+            console.log(response);
+            TacheBDD.refreshInterface();
+            //console.log("OUAIIIII");
+        })
+            .catch((err) => console.log(err));
     }
     /////////////////////////////////////////////////////////////////////
     static terminer(tache) {
-        console.log("tes dans terminer mon gars"+tache);
+        //console.log("tes dans terminer mon gars"+tache);
         fetch(this.baseUrl +"/"+tache+ "/terminer",{
             method: "PUT",
             body: JSON.stringify(tache),
@@ -78,12 +87,12 @@ class TacheBDD {
         })
         .then(function(response){
             console.log(response);
-            console.log("tas recup la reponse franchement tes un bg");
+            //console.log("tas recup la reponse franchement tes un bg");
             
             TacheBDD.refreshInterface();
         })
         .catch(err => console.log(err))
-        console.log("OOOOUUAAA");
+        //console.log("OOOOUUAAA");
     }
     /////////////////////////////////////////////////////////////////////
     static supprimer(idTache) {
@@ -203,7 +212,8 @@ afficher() {
             <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
             <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
             <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
-        </div>
+            <button type="button" id="modifier${this.getid()}" onclick="TacheBDD.modifier(${this.getid()})" class="btn btn-outline-info">Modifier</button>
+            </div>
     </div>`;
 
     listeTaches.innerHTML += htmlTache;
