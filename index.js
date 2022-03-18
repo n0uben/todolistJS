@@ -15,7 +15,7 @@ class TacheBDD {
         //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
-
+        
         // recupere toutes les taches et les insere dans le HTML
         this.getAll()
             .then((json) => {
@@ -26,11 +26,56 @@ class TacheBDD {
                         element.date,
                         element.description,
                         element.terminee
-                    );
+                        );
                     nouvelleTache.afficher();
                 }
             })
             .catch((error) => console.error(error));
+        }
+        
+    static afficherTachesEnCours() {
+        let listeTaches = document.getElementById("listeTaches");
+        listeTaches.innerHTML = "";
+        console.log("SALUT SALUT CHUI EN COURS")
+        
+        this.getAll()
+            .then((json) => {
+                for (const element of json) {
+                    if (!element.terminee) {
+                        let nouvelleTache = new Tache(
+                            element.id,
+                            element.date,
+                            element.description,
+                            element.terminee
+                        );
+                        nouvelleTache.afficher();
+                    }
+                }
+            }
+            
+            )
+    }
+    static afficherTachesTerminees() {
+        let listeTaches = document.getElementById("listeTaches");
+        listeTaches.innerHTML = "";
+        
+        console.log("SALUT SALUT CHUI TERMINEE");
+        this.getAll()
+            .then((json) => {
+                for (const element of json) {
+                    if (element.terminee) {
+                        let nouvelleTache = new Tache(
+                            element.id,
+                            element.date,
+                            element.description,
+                            element.terminee
+                        );
+                        nouvelleTache.afficher();
+                    }
+                }
+            }
+
+            )
     }
     static refreshInterface() {
         //on vide l'input et on rafraichit la liste des taches
@@ -38,7 +83,6 @@ class TacheBDD {
         this.afficherTaches();
     }
     static async enregistrer(tache) {
-        console.log("proouut");
         let descriptionTache = {
             description: tache.description
         };
@@ -79,9 +123,8 @@ class TacheBDD {
     /////////////////////////////////////////////////////////////////////
     static terminer(tache) {
         //console.log("tes dans terminer mon gars"+tache);
-        fetch(this.baseUrl +"/"+tache+ "/terminer",{
+        fetch(this.baseUrl +"/"+ tache + "/terminer",{
             method: "PUT",
-            body: JSON.stringify(tache),
             headers: {"Content-type":"application/json; charset=UTF-8"}
             
         })
@@ -155,42 +198,13 @@ class Tache {
         //à faire
     }
 
-    /*methodes*/
-
-    /*afficher() {
-        let listeTaches = document.getElementById("listeTaches");
-
-        let tacheCochee = "";
-        let tacheDesactivee = "";
-
-        if (this.getTerminee()) {
-            tacheCochee = "checked";
-            tacheDesactivee = "disabled";
-        }
-
-        let htmlTache = `<div class="col-12 p-4 mb-2">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee}>
-                <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
-                <button type="button" id="supprimer${this.getid()}" onclick="TacheBDD.supprimer(${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
-            </div>
-        </div>`;
-
-        listeTaches.innerHTML += htmlTache;
-    }
-}*/
 
 static messageAvantSuppression(id) {
     
     let confirmationSup = confirm("voulez vous supprimer?");
 
     if(confirmationSup){
-        console.log("erreur coouuucouuu");
         TacheBDD.supprimer(id);
-        console.log("erreur2");
-    }
-    else{
-        alert("pas de supp");
     }
 }
 
@@ -241,12 +255,14 @@ boutonTout.addEventListener("click", () => TacheBDD.afficherTaches());
 
 /* clic bouton en cours */
 const boutonEnCours = document.getElementById("afficherEnCours");
-//modifier getall() pour pouvoir obtenir seulement les taches en cours
+console.log(boutonEnCours);
+boutonEnCours.addEventListener("click", () => TacheBDD.afficherTachesEnCours());
 
 
 /* clic bouton terminées */
-const boutonAffcherTerminees = document.getElementById("afficherTerminees");
-//modifier getall() pour pouvoir obtenir seulement les taches terminées
+const boutonAfficherTerminees = document.getElementById("afficherTerminees");
+console.log(boutonAfficherTerminees);
+boutonAfficherTerminees.addEventListener("click", () => TacheBDD.afficherTachesTerminees());
 
 /* clic bouton ajouter une tache */ 
 const boutonAjouter = document.getElementById("button-addon");
