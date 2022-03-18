@@ -1,5 +1,5 @@
-class TacheBDD {
-    static baseUrl = "http://localhost:9090/api/taches";
+    class TacheBDD {
+    static baseUrl = "http://localhost:9090/api/taches/";
 
     static async getAll() {
 
@@ -31,12 +31,11 @@ class TacheBDD {
                 }
             })
             .catch((error) => console.error(error));
-        }
+    }
         
     static afficherTachesEnCours() {
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
-        console.log("SALUT SALUT CHUI EN COURS")
         
         this.getAll()
             .then((json) => {
@@ -59,7 +58,6 @@ class TacheBDD {
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
         
-        console.log("SALUT SALUT CHUI TERMINEE");
         this.getAll()
             .then((json) => {
                 for (const element of json) {
@@ -82,6 +80,7 @@ class TacheBDD {
         document.getElementById("inputAjouter").value = "";
         this.afficherTaches();
     }
+
     static async enregistrer(tache) {
         let descriptionTache = {
             description: tache.description
@@ -100,7 +99,7 @@ class TacheBDD {
     }
     ///////////////////////////////////////////////////////////////////
 
-    static modifier(tache) {
+    static modifier(tacheId) {
 
         let nouvelleDescription=prompt("quelle est la nouvelle Tâche ?");
         //console.log(nouvelleDescription);
@@ -108,7 +107,7 @@ class TacheBDD {
         let descriptionTache = {
             description: nouvelleDescription,
         };
-        fetch(this.baseUrl + "/" + tache, {
+        fetch(this.baseUrl + tacheId , {
             method: "PUT",
             body: JSON.stringify(descriptionTache),
             headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -121,9 +120,8 @@ class TacheBDD {
             .catch((err) => console.log(err));
     }
     /////////////////////////////////////////////////////////////////////
-    static terminer(tache) {
-        //console.log("tes dans terminer mon gars"+tache);
-        fetch(this.baseUrl +"/"+ tache + "/terminer",{
+    static terminer(tacheId) {
+        fetch(this.baseUrl + tacheId + "/terminer",{
             method: "PUT",
             headers: {"Content-type":"application/json; charset=UTF-8"}
             
@@ -138,9 +136,9 @@ class TacheBDD {
         //console.log("OOOOUUAAA");
     }
     /////////////////////////////////////////////////////////////////////
-    static supprimer(idTache) {
-        console.log(this.baseUrl+"/"+idTache);
-        fetch(this.baseUrl+"/"+idTache,{
+    static supprimer(tacheId) {
+        console.log();
+        fetch(this.baseUrl + tacheId,{
                 method: "DELETE",
                 
                 headers: {"Content-type":"application/json; charset=UTF-8"}
@@ -199,12 +197,12 @@ class Tache {
     }
 
 
-static messageAvantSuppression(id) {
+static messageAvantSuppression(tacheId) {
     
     let confirmationSup = confirm("voulez vous supprimer?");
 
     if(confirmationSup){
-        TacheBDD.supprimer(id);
+        TacheBDD.supprimer(tacheId);
     }
 }
 
