@@ -18,4 +18,5 @@ body {
 .les-taches input[type="checkbox"] {
     background: #0d6efd;
     border: none;
+    cursor: pointer;
 }
