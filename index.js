@@ -199,7 +199,7 @@ class Tache {
 
 static messageAvantSuppression(tacheId) {
     
-    let confirmationSup = confirm("voulez vous supprimer?");
+    let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
 
     if(confirmationSup){
         TacheBDD.supprimer(tacheId);
@@ -219,13 +219,19 @@ afficher() {
 
     
 
-    let htmlTache = `<div class="col-12 p-4 mb-2">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
-            <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
-            <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger">Supprimer</button>
-            <button type="button" id="modifier${this.getid()}" onclick="TacheBDD.modifier(${this.getid()})" class="btn btn-outline-info">Modifier</button>
+    let htmlTache = 
+    
+    `<div class="les-taches col-12 col-xl-10 offset-xl-1 p-4 mb-3 shadow-sm bg-white">
+        <div class="row">
+            <div class="col-12 mb-3 col-lg-6 d-flex align-items-center form-check">
+                <input class="form-check-input mx-4 p-2" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
+                <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
             </div>
+            <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">
+                <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger mx-1">Supprimer</button>
+                <button type="button" id="modifier${this.getid()}" onclick="TacheBDD.modifier(${this.getid()})" class="btn btn-outline-info mx-1">Modifier</button>
+            </div>
+        </div>
     </div>`;
 
     listeTaches.innerHTML += htmlTache;
