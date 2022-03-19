@@ -229,7 +229,7 @@ afficher() {
             </div>
             <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">
                 <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger mx-1">Supprimer</button>
-                <button type="button" id="modifier${this.getid()}" onclick="TacheBDD.modifier(${this.getid()})" class="btn btn-outline-info mx-1">Modifier</button>
+                <button type="button" id="modifier${this.getid()}" onclick="TacheBDD.modifier(${this.getid()})" class="btn btn-outline-primary mx-1">Modifier</button>
             </div>
         </div>
     </div>`;
