@@ -1,81 +1,71 @@
-    class TacheBDD {
+class TacheBDD {
     static baseUrl = "http://localhost:9090/api/taches/";
 
     static async getAll() {
-
         let reponse = await fetch(this.baseUrl);
         let json = await reponse.json();
-    
-        return json;
 
+        return json;
     }
 
     static afficherTaches() {
-       
         //vide la liste des taches
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
-        
+
         // recupere toutes les taches et les insere dans le HTML
         this.getAll()
             .then((json) => {
                 console.log(json);
                 for (const element of json) {
-                    
                     let nouvelleTache = new Tache(
                         element.id,
                         element.date,
                         element.description,
                         element.terminee
-                        );
+                    );
                     nouvelleTache.afficher();
-                    console.log(nouvelleTache)
+                    console.log(nouvelleTache);
                 }
             })
             .catch((error) => console.error(error));
     }
-        
+
     static afficherTachesEnCours() {
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
-        
-        this.getAll()
-            .then((json) => {
-                for (const element of json) {
-                    if (!element.terminee) {
-                        let nouvelleTache = new Tache(
-                            element.id,
-                            element.date,
-                            element.description,
-                            element.terminee
-                        );
-                        nouvelleTache.afficher();
-                    }
+
+        this.getAll().then((json) => {
+            for (const element of json) {
+                if (!element.terminee) {
+                    let nouvelleTache = new Tache(
+                        element.id,
+                        element.date,
+                        element.description,
+                        element.terminee
+                    );
+                    nouvelleTache.afficher();
                 }
             }
-            
-            )
+        });
     }
     static afficherTachesTerminees() {
         let listeTaches = document.getElementById("listeTaches");
         listeTaches.innerHTML = "";
-        
-        this.getAll()
-            .then((json) => {
-                for (const element of json) {
-                    if (element.terminee) {
-                        let nouvelleTache = new Tache(
-                            element.id,
-                            element.date,
-                            element.description,
-                            element.terminee
-                        );
-                        nouvelleTache.afficher();
-                    }
+
+        this.getAll().then((json) => {
+            for (const element of json) {
+                if (element.terminee) {
+                    let nouvelleTache = new Tache(
+                        element.id,
+                        element.date,
+                        element.description,
+                        element.terminee
+                    );
+                    nouvelleTache.afficher();
                 }
             }
-
-            )
+        });
     }
     static refreshInterface() {
         //on vide l'input et on rafraichit la liste des taches
@@ -85,7 +75,7 @@
 
     static async enregistrer(tache) {
         let descriptionTache = {
-            description: tache.description
+            description: tache.description,
         };
         console.log(descriptionTache);
 
@@ -97,64 +87,59 @@
         console.log("apres la function?");
 
         return tacheEnregistree;
-
     }
     ///////////////////////////////////////////////////////////////////
 
     static modifier(tacheId) {
-
-        let nouvelleDescription=prompt("quelle est la nouvelle Tâche ?");
+        let nouvelleDescription = prompt("quelle est la nouvelle Tâche ?");
         //console.log(nouvelleDescription);
-        
+
         let descriptionTache = {
             description: nouvelleDescription,
         };
-        fetch(this.baseUrl + tacheId , {
+        fetch(this.baseUrl + tacheId, {
             method: "PUT",
             body: JSON.stringify(descriptionTache),
             headers: { "Content-type": "application/json; charset=UTF-8" },
         })
-        .then(function(response){
-            console.log(response);
-            TacheBDD.refreshInterface();
-            //console.log("OUAIIIII");
-        })
+            .then(function (response) {
+                console.log(response);
+                TacheBDD.refreshInterface();
+                //console.log("OUAIIIII");
+            })
             .catch((err) => console.log(err));
     }
     /////////////////////////////////////////////////////////////////////
     static terminer(tacheId) {
-        fetch(this.baseUrl + tacheId + "/terminer",{
+        fetch(this.baseUrl + tacheId + "/terminer", {
             method: "PUT",
-            headers: {"Content-type":"application/json; charset=UTF-8"}
-            
+            headers: { "Content-type": "application/json; charset=UTF-8" },
         })
-        .then(function(response){
-            console.log(response);
-            //console.log("tas recup la reponse franchement tes un bg");
-            
-            TacheBDD.refreshInterface();
-        })
-        .catch(err => console.log(err))
+            .then(function (response) {
+                console.log(response);
+                //console.log("tas recup la reponse franchement tes un bg");
+
+                TacheBDD.refreshInterface();
+            })
+            .catch((err) => console.log(err));
         //console.log("OOOOUUAAA");
     }
     /////////////////////////////////////////////////////////////////////
     static supprimer(tacheId) {
-        console.log();
-        fetch(this.baseUrl + tacheId,{
+        let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
+
+        if (confirmationSup) {
+            fetch(this.baseUrl + tacheId, {
                 method: "DELETE",
-                
-                headers: {"Content-type":"application/json; charset=UTF-8"}
-            })
-            .then(function(){
-                TacheBDD.refreshInterface();//une fois la promesse reçu alors->refresh interface
-                
 
+                headers: { "Content-type": "application/json; charset=UTF-8" },
             })
-            .catch(err => console.log(err))
-        
-
+                .then(function () {
+                    TacheBDD.refreshInterface(); //une fois la promesse reçu alors->refresh interface
+                })
+                .catch((err) => console.log(err));
+        }
     }
-        
 }
 /////////////////////////////////////////////////////////////////////
 class Tache {
@@ -198,32 +183,18 @@ class Tache {
         //à faire
     }
 
+    afficher() {
+        let listeTaches = document.getElementById("listeTaches");
 
-static messageAvantSuppression(tacheId) {
-    
-    let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
+        let tacheCochee = "";
+        let tacheDesactivee = "";
 
-    if(confirmationSup){
-        TacheBDD.supprimer(tacheId);
-    }
-}
+        if (this.getTerminee()) {
+            tacheCochee = "checked";
+            tacheDesactivee = "disabled";
+        }
 
-afficher() {
-    let listeTaches = document.getElementById("listeTaches");
-
-    let tacheCochee = "";
-    let tacheDesactivee = "";
-
-    if (this.getTerminee()) {
-        tacheCochee = "checked";
-        tacheDesactivee = "disabled";
-    }
-
-    
-
-    let htmlTache = 
-    
-    `<div class="les-taches col-12 col-xl-10 offset-xl-1 p-4 mb-3 shadow-sm bg-white">
+        let htmlTache = `<div class="les-taches col-12 col-xl-10 offset-xl-1 p-4 mb-3 shadow-sm bg-white">
         <div class="row">
             <div class="col-12 mb-3 col-lg-6 d-flex align-items-center form-check">
                 <input class="form-check-input mx-4 p-3" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
@@ -236,10 +207,9 @@ afficher() {
         </div>
     </div>`;
 
-    listeTaches.innerHTML += htmlTache;
+        listeTaches.innerHTML += htmlTache;
+    }
 }
-}
-
 
 /////////////////////////////////////////////////////////////
 // INTERFACE
@@ -254,7 +224,6 @@ afficher() {
 //     }
 // }
 
-
 /* clic bouton tout */
 const boutonTout = document.getElementById("afficherTout");
 boutonTout.addEventListener("click", () => TacheBDD.afficherTaches());
@@ -264,13 +233,14 @@ const boutonEnCours = document.getElementById("afficherEnCours");
 console.log(boutonEnCours);
 boutonEnCours.addEventListener("click", () => TacheBDD.afficherTachesEnCours());
 
-
 /* clic bouton terminées */
 const boutonAfficherTerminees = document.getElementById("afficherTerminees");
 console.log(boutonAfficherTerminees);
-boutonAfficherTerminees.addEventListener("click", () => TacheBDD.afficherTachesTerminees());
+boutonAfficherTerminees.addEventListener("click", () =>
+    TacheBDD.afficherTachesTerminees()
+);
 
-/* clic bouton ajouter une tache */ 
+/* clic bouton ajouter une tache */
 const boutonAjouter = document.getElementById("button-addon");
 const inputAjouter = document.getElementById("inputAjouter");
 //const boutonSupprimer = document.getElementById("supprimer${this.getid()}");
@@ -278,12 +248,11 @@ const inputAjouter = document.getElementById("inputAjouter");
 boutonAjouter.addEventListener("click", () => {
     const value = inputAjouter.value;
     const regex = /[a-z0-9]{1,255}/gi;
-    if (value.match(regex) ) {
+    if (value.match(regex)) {
         const maTache = new Tache(null, null, inputAjouter.value, null);
-        TacheBDD.enregistrer(maTache).then(() => TacheBDD.refreshInterface());//une fois la promesse reçu alors->refresh interface
+        TacheBDD.enregistrer(maTache).then(() => TacheBDD.refreshInterface()); //une fois la promesse reçu alors->refresh interface
     }
 });
-
 
 /////////////////////////////////////////////////////////////
 
