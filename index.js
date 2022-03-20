@@ -226,7 +226,7 @@ afficher() {
     `<div class="les-taches col-12 col-xl-10 offset-xl-1 p-4 mb-3 shadow-sm bg-white">
         <div class="row">
             <div class="col-12 mb-3 col-lg-6 d-flex align-items-center form-check">
-                <input class="form-check-input mx-4 p-3 bg-success" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
+                <input class="form-check-input mx-4 p-3" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="TacheBDD.terminer(${this.getid()})">
                 <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
             </div>
             <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">

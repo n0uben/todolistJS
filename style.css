@@ -3,20 +3,3 @@
 body {
     background: #dedede
 }
-
-/*Liste taches*/
-.les-taches {
-    transition: all 300ms ease-in-out;
-}
-.les-taches:hover {
-    transform: scale(1.05);
-}
-
-.les-taches label:hover {
-    cursor: pointer;
-}
-.les-taches input[type="checkbox"] {
-    background: #0d6efd;
-    border: none;
-    cursor: pointer;
-}
