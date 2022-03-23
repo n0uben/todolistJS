@@ -3,3 +3,10 @@
 body {
     background: #dedede
 }
+
+.les-taches label:hover {
+    cursor: pointer;
+}
+.les-taches input[type="checkbox"] {
+    cursor: pointer;
+}
