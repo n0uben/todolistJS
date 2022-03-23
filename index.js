@@ -237,18 +237,29 @@ class ListeTaches {
     static initUserInput() {
         const boutonAjouter = document.getElementById("button-addon");
         const inputAjouter = document.getElementById("inputAjouter");
-
+        
+        //si user clique sur bouton ajouter
         boutonAjouter.addEventListener("click", () => {
-            const value = inputAjouter.value;
-            const regex = /[a-z0-9]{1,255}/gi;
-            if (value.match(regex)) {
-                const maTache = new Tache(null, null, inputAjouter.value, null);
-                ApiTaches.enregistrer(maTache).then(() =>
-                    ListeTaches.rafraichir()
-                );
-            }
+            this.ajouterTache();
         });
+        //si user appuie sur touche entrer
+        inputAjouter.addEventListener("keydown", (e) => {
+            if (e.code == "Enter") {
+                this.ajouterTache();
+            }
+        })
     }
+
+    static ajouterTache() {
+        const value = inputAjouter.value;
+        const regex = /[a-z0-9]{1,255}/gi;
+        if (value.match(regex)) {
+            const maTache = new Tache(null, null, inputAjouter.value, null);
+            ApiTaches.enregistrer(maTache).then(() =>
+                ListeTaches.rafraichir()
+            );
+        }
+}
 }
 
 /////////////////////////////////////////////////////////////
