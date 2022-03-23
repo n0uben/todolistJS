@@ -5,11 +5,34 @@
 class ApiTaches {
     static baseUrl = "http://localhost:9090/api/taches/";
 
-    static async getAll() {
+    static async getJson() {
         let reponse = await fetch(this.baseUrl);
         let json = await reponse.json();
-
+        //on trie par ID décroissant (z -> a) pour avoir les plus récentes en premier
         return json.sort((a,b) => b.id - a.id);
+    }
+
+    static async getAll() {
+        let json = await this.getAll();
+        let arrayTache = [];
+        
+        for (const tache of json) {
+            arrayTache.push(new Tache(tache.id, tache.date, tache.description, tache.terminee));
+        }
+
+        return arrayTache;
+    }
+
+    static async getTerminees() {
+        let arrayTache = await this.getAll();
+        
+        return arrayTache.filter(tache => tache.terminee == "true");
+    }
+
+    static async getEnCours() {
+        let arrayTache = await this.getAll();
+        
+        return arrayTache.filter(tache => tache.terminee == "true");
     }
 
     static async enregistrer(tache) {
@@ -121,7 +144,7 @@ class Tache {
             ApiTaches.supprimer(tacheId);
         }
     }
-    afficher() {
+    getHTML() {
         let listeTaches = document.querySelector("#listeTaches");
 
         let tacheCochee = "";
@@ -145,7 +168,7 @@ class Tache {
             </div>
         </div>`;
 
-        listeTaches.insertAdjacentHTML("beforeend", htmlTache);
+        return htmlTache;
     }
 }
 
@@ -160,7 +183,7 @@ class ListeTaches {
 
     static listeTaches = document.getElementById("listeTaches");
 
-    static vider() {
+    static viderEnCours() {
         ListeTaches.listeTaches.innerHTML = "";
     }
 
@@ -184,7 +207,7 @@ class ListeTaches {
     }
 
     static afficherEnCours() {
-        ListeTaches.vider();
+        ListeTaches.viderEnCours();
 
         ApiTaches.getAll().then((json) => {
             for (const element of json) {
@@ -201,7 +224,7 @@ class ListeTaches {
         });
     }
     static afficherTerminees() {
-        ListeTaches.vider();
+        ListeTaches.viderTerminees();
 
         ApiTaches.getAll().then((json) => {
             for (const element of json) {
