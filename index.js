@@ -166,7 +166,7 @@ class Tache {
                     <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
                 </div>
                 <div class="col-12 col-lg-6 d-flex justify-content-end align-items-center">
-                <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="bouton-modifier btn btn-outline-primary mx-1"><i class="fas fa-edit"></i></button>
+                <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="bouton-modifier btn btn-outline-primary mx-1" ${tacheDesactivee}><i class="fas fa-edit"></i></button>
                 <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="bouton-supprimer btn btn-outline-danger mx-1"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
