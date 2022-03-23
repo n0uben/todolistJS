@@ -3,6 +3,9 @@
 body {
     background: #dedede
 }
+main {
+    min-height: 80vh;
+}
 
 .les-taches label:hover {
     cursor: pointer;

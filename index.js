@@ -204,7 +204,7 @@ class ListeTaches {
 
     //////////////////////////////////////////////////////////////
     static afficherEnCours() {
-        this.viderEnCours();
+        this.vider();
 
         ApiTaches.getEnCours().then((arrayTache) => {
             for (const tache of arrayTache) {
@@ -216,7 +216,7 @@ class ListeTaches {
         });
     }
     static afficherTerminees() {
-        this.viderTerminees();
+        this.vider();
 
         ApiTaches.getTerminees().then((arrayTache) => {
             for (const tache of arrayTache) {
