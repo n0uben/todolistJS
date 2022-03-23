@@ -5,7 +5,6 @@
 class ApiTaches {
     static baseUrl = "http://localhost:9090/api/taches/";
 
-    //TESTÉ : OK
     static async getJson() {
         let reponse = await fetch(this.baseUrl);
         let json = await reponse.json();
@@ -13,7 +12,6 @@ class ApiTaches {
 
         return json.sort((a, b) => b.id - a.id);
     }
-    // TESTÉ : OK
     static async getAll() {
         let json = await this.getJson();
         let arrayTache = [];
@@ -70,7 +68,6 @@ class ApiTaches {
         })
             .then(function (response) {
                 ListeTaches.rafraichir();
-                //console.log("OUAIIIII");
             })
             .catch((err) => console.log(err));
     }
@@ -81,8 +78,6 @@ class ApiTaches {
             headers: { "Content-type": "application/json; charset=UTF-8" },
         })
             .then(function (response) {
-                console.log(response);
-
                 ListeTaches.rafraichir();
             })
             .catch((err) => console.log(err));
@@ -229,8 +224,23 @@ class ListeTaches {
     }
     static afficherTaches() {
 
-        this.afficherEnCours();
-        this.afficherTerminees();
+        this.vider();
+
+        ApiTaches.getAll().then((arrayTache) => {
+            for (const tache of arrayTache) {
+                if (tache.getTerminee() == true) {
+                    this.listeTachesTerminees.insertAdjacentHTML(
+                        "beforeend",
+                        tache.getHTML()
+                    );
+                } else if (tache.getTerminee() == false) {
+                    this.listeTachesEnCours.insertAdjacentHTML(
+                        "beforeend",
+                        tache.getHTML()
+                    );
+                }
+            }
+        });
     }
 
     static rafraichir() {
