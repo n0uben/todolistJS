@@ -13,7 +13,7 @@ class ApiTaches {
     }
 
     static async getAll() {
-        let json = await this.getAll();
+        let json = await this.getJson();
         let arrayTache = [];
         
         for (const tache of json) {
@@ -145,8 +145,6 @@ class Tache {
         }
     }
     getHTML() {
-        let listeTaches = document.querySelector("#listeTaches");
-
         let tacheCochee = "";
         let tacheDesactivee = "";
 
@@ -181,80 +179,59 @@ class ListeTaches {
     static boutonEnCours = document.getElementById("afficherEnCours");
     static boutonTerminees = document.getElementById("afficherTerminees");
 
-    static listeTaches = document.getElementById("listeTaches");
+    static listeTachesEnCours = document.getElementById("listeTachesEnCours");
+    static listeTachesTerminees = document.getElementById("listeTachesTerminees");
 
     static viderEnCours() {
-        ListeTaches.listeTaches.innerHTML = "";
+        this.listeTachesEnCours.innerHTML = "";
+    }
+    static viderTerminees() {
+        this.listeTachesTerminees.innerHTML = "";
+    }
+    static vider() {
+        this.viderEnCours();
+        this.viderTerminees();
     }
 
     static afficherTaches() {
-        //vide la liste des taches
-        ListeTaches.vider();
-        // recupere toutes les taches et les insere dans le HTML
-        ApiTaches.getAll()
-            .then((json) => {
-                for (const element of json) {
-                    let nouvelleTache = new Tache(
-                        element.id,
-                        element.date,
-                        element.description,
-                        element.terminee
-                    );
-                    nouvelleTache.afficher();
-                }
-            })
-            .catch((error) => console.error(error));
+       this.afficherEnCours;
+       this.afficherTerminees();
     }
 
     static afficherEnCours() {
-        ListeTaches.viderEnCours();
+        this.viderEnCours();
 
-        ApiTaches.getAll().then((json) => {
-            for (const element of json) {
-                if (!element.terminee) {
-                    let nouvelleTache = new Tache(
-                        element.id,
-                        element.date,
-                        element.description,
-                        element.terminee
-                    );
-                    nouvelleTache.afficher();
-                }
+        ApiTaches.getEnCours().then((arrayTache) => {
+            for (const tache of arrayTache) {
+                this.listeTachesEnCours.insertAdjacentHTML("beforeend", tache.getHTML());
             }
         });
     }
     static afficherTerminees() {
-        ListeTaches.viderTerminees();
+        this.viderTerminees();
 
-        ApiTaches.getAll().then((json) => {
-            for (const element of json) {
-                if (element.terminee) {
-                    let nouvelleTache = new Tache(
-                        element.id,
-                        element.date,
-                        element.description,
-                        element.terminee
-                    );
-                    nouvelleTache.afficher();
-                }
+        ApiTaches.getTerminees().then((arrayTache) => {
+            for (const tache of arrayTache) {
+                this.listeTachesEnCours.insertAdjacentHTML("beforeend", tache.getHTML());
             }
         });
+        
     }
     static rafraichir() {
-        document.getElementById("inputAjouter").value = "";
-        ListeTaches.afficherTaches();
+        // document.getElementById("inputAjouter").value = "";
+        this.afficherTaches();
     }
     static initFiltres() {
-        ListeTaches.boutonTout.addEventListener("click", () =>
-            ListeTaches.afficherTaches()
+        this.boutonTout.addEventListener("click", () =>
+            this.afficherTaches()
         );
 
-        ListeTaches.boutonEnCours.addEventListener("click", () =>
-            ListeTaches.afficherEnCours()
+        this.boutonEnCours.addEventListener("click", () =>
+            this.afficherEnCours()
         );
 
-        ListeTaches.boutonTerminees.addEventListener("click", () =>
-            ListeTaches.afficherTerminees()
+        this.boutonTerminees.addEventListener("click", () =>
+            this.afficherTerminees()
         );
     }
     static initUserInput() {
@@ -279,7 +256,7 @@ class ListeTaches {
         if (value.match(regex)) {
             const maTache = new Tache(null, null, inputAjouter.value, null);
             ApiTaches.enregistrer(maTache).then(() =>
-                ListeTaches.rafraichir()
+                this.rafraichir()
             );
         }
 }
@@ -289,7 +266,7 @@ class ListeTaches {
 // LETSGO
 /////////////////////////////////////////////////////////////
 
-ListeTaches.afficherTaches();
+ListeTaches.afficherEnCours();
 
 ListeTaches.initFiltres();
 
