@@ -9,7 +9,7 @@ class ApiTaches {
         let reponse = await fetch(this.baseUrl);
         let json = await reponse.json();
 
-        return json;
+        return json.sort((a,b) => b.id - a.id);
     }
 
     static async enregistrer(tache) {
