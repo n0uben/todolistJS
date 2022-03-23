@@ -16,7 +16,6 @@ class ApiTaches {
         let descriptionTache = {
             description: tache.description,
         };
-        console.log(descriptionTache);
 
         let tacheEnregistree = await fetch(this.baseUrl, {
             method: "POST",
@@ -54,12 +53,10 @@ class ApiTaches {
         })
             .then(function (response) {
                 console.log(response);
-                //console.log("tas recup la reponse franchement tes un bg");
 
                 ListeTaches.rafraichir();
             })
             .catch((err) => console.log(err));
-        //console.log("OOOOUUAAA");
     }
     /////////////////////////////////////////////////////////////////////
     static supprimer(tacheId) {
@@ -70,7 +67,7 @@ class ApiTaches {
             headers: { "Content-type": "application/json; charset=UTF-8" },
         })
             .then(function () {
-                ListeTaches.rafraichir(); //une fois la promesse reçu alors->refresh interface
+                ListeTaches.rafraichir();
             })
             .catch((err) => console.log(err));
     }
@@ -91,7 +88,6 @@ class Tache {
         this.terminee = terminee;
     }
 
-    /*getters*/
     getid() {
         return this.id;
     }
@@ -105,7 +101,6 @@ class Tache {
         return this.terminee;
     }
 
-    /*setters*/
     setDescription(description) {
         this.description = description;
     }
@@ -115,9 +110,9 @@ class Tache {
     toString() {
         return this.toString();
     }
-    equals(other) {
-        //à faire
-    }
+    // equals(other) {
+    //     //à faire
+    // }
 
     static messageAvantSuppression(tacheId) {
         let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
@@ -126,30 +121,6 @@ class Tache {
             ApiTaches.supprimer(tacheId);
         }
     }
-
-    // getHTML() {
-    //     let tacheCochee = "";
-    //     let tacheDesactivee = "";
-
-    //     if (this.getTerminee()) {
-    //         tacheCochee = "checked";
-    //         tacheDesactivee = "disabled";
-    //     }
-
-    //     let htmlTache = `<div class="les-taches col-12 col-xl-10 offset-xl-1 p-4 mb-3 shadow-sm bg-white">
-    //     <div class="row">
-    //         <div class="col-12 mb-3 col-lg-6 d-flex align-items-center form-check">
-    //             <input class="form-check-input mx-4 p-3 bg-success" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="ApiTaches.terminer(${this.getid()})">
-    //             <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
-    //         </div>
-    //         <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">
-    //             <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="btn btn-outline-danger mx-1">Supprimer</button>
-    //             <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="btn btn-outline-primary mx-1">Modifier</button>
-    //         </div>
-    //     </div>
-    // </div>`;
-    //     return htmlTache;
-    // }
     afficher() {
         let listeTaches = document.querySelector("#listeTaches");
 
@@ -199,7 +170,6 @@ class ListeTaches {
         // recupere toutes les taches et les insere dans le HTML
         ApiTaches.getAll()
             .then((json) => {
-                console.log(json);
                 for (const element of json) {
                     let nouvelleTache = new Tache(
                         element.id,
@@ -248,28 +218,25 @@ class ListeTaches {
         });
     }
     static rafraichir() {
-        //on vide l'input et on rafraichit la liste des taches
         document.getElementById("inputAjouter").value = "";
-        this.afficherTaches();
+        ListeTaches.afficherTaches();
     }
     static initFiltres() {
-        boutonTout.addEventListener("click", () =>
+        ListeTaches.boutonTout.addEventListener("click", () =>
             ListeTaches.afficherTaches()
         );
 
-        boutonEnCours.addEventListener("click", () =>
+        ListeTaches.boutonEnCours.addEventListener("click", () =>
             ListeTaches.afficherEnCours()
         );
 
-        boutonTerminees.addEventListener("click", () =>
+        ListeTaches.boutonTerminees.addEventListener("click", () =>
             ListeTaches.afficherTerminees()
         );
     }
     static initUserInput() {
-        /* clic bouton ajouter une tache */
         const boutonAjouter = document.getElementById("button-addon");
         const inputAjouter = document.getElementById("inputAjouter");
-        //const boutonSupprimer = document.getElementById("supprimer${this.getid()}");
 
         boutonAjouter.addEventListener("click", () => {
             const value = inputAjouter.value;
@@ -278,7 +245,7 @@ class ListeTaches {
                 const maTache = new Tache(null, null, inputAjouter.value, null);
                 ApiTaches.enregistrer(maTache).then(() =>
                     ListeTaches.rafraichir()
-                ); //une fois la promesse reçu alors->refresh interface
+                );
             }
         });
     }
