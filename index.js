@@ -176,9 +176,17 @@ class Tache {
 /////////////////////////////////////////////////////////////
 
 class ListeTaches {
+
+    static nbTaches = 0;
+    static nbTachesTerminees = 0;
+
+    
     static boutonTout = document.getElementById("afficherTout");
     static boutonEnCours = document.getElementById("afficherEnCours");
     static boutonTerminees = document.getElementById("afficherTerminees");
+    
+    static progressEnCours = document.getElementById("progressEnCours");
+    static progressTerminees = document.getElementById("progressTerminees");
 
     static listeTachesEnCours = document.getElementById("listeTachesEnCours");
     static listeTachesTerminees = document.getElementById(
@@ -226,6 +234,9 @@ class ListeTaches {
 
         this.vider();
 
+        this.nbTaches = 0;
+        this.nbTachesTerminees = 0;
+
         ApiTaches.getAll().then((arrayTache) => {
             for (const tache of arrayTache) {
                 if (tache.getTerminee() == true) {
@@ -233,18 +244,55 @@ class ListeTaches {
                         "beforeend",
                         tache.getHTML()
                     );
+                    this.nbTachesTerminees += 1;
                 } else if (tache.getTerminee() == false) {
                     this.listeTachesEnCours.insertAdjacentHTML(
                         "beforeend",
                         tache.getHTML()
                     );
                 }
+
+                this.nbTaches += 1;
+                
             }
-        });
+            
+        }).then(() => this.updateProgress())
+        .catch((err) => {
+            console.error(err);
+        })
+
     }
 
     static rafraichir() {
         this.afficherTaches();
+    }
+    ////////////////////////////////////////////////////////////////////
+    static getProgress() {
+        if (this.nbTaches > 0) {
+            return Math.round((this.nbTachesTerminees / this.nbTaches) * 100);
+        }
+        return 0;
+    }
+    static updateProgress() {
+        
+        let progress = this.getProgress();
+
+        let todo = 100 - progress;
+
+        progressEnCours.style.width = progress + "%";
+        progressTerminees.style.width = todo + "%";
+
+        let progressHTML = `${this.nbTachesTerminees} / ${this.nbTaches}`;
+
+        if (progress > 0) {
+            this.progressEnCours.innerHTML = "";
+            this.progressEnCours.insertAdjacentHTML("beforeend", progressHTML);
+        }
+
+        if (progress == 100) {
+            this.progressEnCours.innerHTML = "";
+            this.progressEnCours.insertAdjacentHTML("beforeend", "Bravo ! Vous n’avez plus de tâches.");
+        }
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -269,7 +317,7 @@ class ListeTaches {
         });
         //si user appuie sur touche entrer
         inputAjouter.addEventListener("keydown", (e) => {
-            if (e.code == "Enter") {
+            if (e.code == "Enter" || e.code == "Return") {
                 this.ajouterTache();
             }
         });
@@ -282,6 +330,8 @@ class ListeTaches {
             const maTache = new Tache(null, null, inputAjouter.value, null);
             ApiTaches.enregistrer(maTache).then(() => this.rafraichir());
             document.getElementById("inputAjouter").value = "";
+
+            this.nbTaches += 1;
 
         }
     }
