@@ -282,6 +282,9 @@ class ListeTaches {
         progressEnCours.style.width = progress + "%";
         progressTerminees.style.width = todo + "%";
 
+        this.progressEnCours.setAttribute("aria-valuenow", `${progress}`);
+        this.progressTerminees.setAttribute("aria-valuenow", `${todo}`);
+
         let progressHTML = `${this.nbTachesTerminees} / ${this.nbTaches}`;
 
         if (progress > 0) {
