@@ -169,7 +169,7 @@ class Tache {
             <div class="row">
                 <div id="input${this.getid()}" class="col-12 mb-3 col-lg-6 d-flex align-items-center form-check">
                     <input class="form-check-input mx-4 p-3" type="checkbox" id="checkbox${this.getid()}" ${tacheCochee} ${tacheDesactivee} onChange="ApiTaches.terminer(${this.getid()})">
-                    <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
+                    <label class="form-check-label text-break" for="checkbox${this.getid()}">${this.getdescription()}</label>
                 </div>
                 <div class="col-12 col-lg-6 d-flex justify-content-end align-items-center">
                 <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="bouton-modifier btn btn-outline-primary mx-1 ${displayNone}"><i class="fas fa-edit"></i></button>
@@ -337,23 +337,35 @@ class ListeTaches {
     static ajouterTache() {
         const value = inputAjouter.value;
 
-        const maTache = new Tache(null, null, encodeURI(value), false);
+        if (value.length > 70) {
+            const maTache = new Tache(null, null, encodeURI(value), false);
 
-        ApiTaches.enregistrer(maTache).then(() => {
-            ApiTaches.getJson().then((json) => {
-                
-                maTache.setId(json[0].id);
-                maTache.setDate(json[0].date);
-                maTache.setDescription(decodeURI(json[0].description));
-
-                this.listeTachesEnCours.insertAdjacentHTML("afterbegin", maTache.getHTML());
+            ApiTaches.enregistrer(maTache).then(() => {
+                ApiTaches.getJson().then((json) => {
+                    
+                    maTache.setId(json[0].id);
+                    maTache.setDate(json[0].date);
+                    maTache.setDescription(decodeURI(json[0].description));
+    
+                    this.listeTachesEnCours.insertAdjacentHTML("afterbegin", maTache.getHTML());
+                });
             });
-        });
-        document.getElementById("inputAjouter").value = "";
+            document.getElementById("inputAjouter").value = "";
+    
+            this.nbTaches += 1;
+            
+            this.updateProgress();
 
-        this.nbTaches += 1;
+            alert.innerHTML = "";
+            alert.classList = "d-none";
+        } else {
+            console.error(error);
+            alert.classList = "d-block alert alert-danger";
+            alert.innerHTML = "Votre tâche ne peut pas faire plus de 70 caractères !";
+
+        }
+
         
-        this.updateProgress();
        
     }
     static messageAvantSuppression(tacheId) {
@@ -388,7 +400,3 @@ ListeTaches.afficherTaches();
 ListeTaches.initFiltres();
 
 ListeTaches.initUserInput();
-
-let maString = "alert(\"Bonjour bonjour\")";
-encoded = encodeURI(maString);
-console.log(encoded);
