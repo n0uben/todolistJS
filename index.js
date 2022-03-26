@@ -148,10 +148,12 @@ class Tache {
     getHTML() {
         let tacheCochee = "";
         let tacheDesactivee = "";
+        let displayNone = "";
 
         if (this.getTerminee()) {
             tacheCochee = "checked";
             tacheDesactivee = "disabled";
+            displayNone = "d-none";
         }
 
         let htmlTache = `<div id="tache${this.getid()}" class="les-taches col-12 col-xl-10 offset-xl-1 p-4 mb-3 shadow-sm bg-white">
@@ -161,7 +163,7 @@ class Tache {
                     <label class="form-check-label" for="checkbox${this.getid()}">${this.getdescription()}</label>
                 </div>
                 <div class="col-12 col-lg-6 d-flex justify-content-end align-items-center">
-                <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="bouton-modifier btn btn-outline-primary mx-1" ${tacheDesactivee}><i class="fas fa-edit"></i></button>
+                <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="bouton-modifier btn btn-outline-primary mx-1 ${displayNone}"><i class="fas fa-edit"></i></button>
                 <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="bouton-supprimer btn btn-outline-danger mx-1"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
@@ -331,7 +333,9 @@ class ListeTaches {
         const regex = /[a-z0-9]{1,255}/gi;
         if (value.match(regex)) {
             const maTache = new Tache(null, null, inputAjouter.value, null);
-            ApiTaches.enregistrer(maTache).then(() => this.rafraichir());
+            ApiTaches.enregistrer(maTache).then(() => {
+                this.rafraichir();
+            });
             document.getElementById("inputAjouter").value = "";
 
             this.nbTaches += 1;
