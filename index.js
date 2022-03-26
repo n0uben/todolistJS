@@ -6,13 +6,23 @@ class ApiTaches {
     static baseUrl = "http://localhost:9090/api/taches/";
 
     static async getJson() {
-        let reponse = await fetch(this.baseUrl);
-        let json = await reponse.json();
-        //on trie par ID décroissant (z -> a) pour avoir les plus récentes en premier
-
-        return json.sort((a, b) => b.id - a.id);
+        let alert = document.querySelector("#alert");
+        try {
+            let reponse = await fetch(this.baseUrl);
+            let json = await reponse.json();
+            alert.innerHTML = "";
+            alert.classList = "d-none";
+            //on trie par ID décroissant (z -> a) pour avoir les plus récentes en premier
+            return json.sort((a, b) => b.id - a.id);
+        } catch (error) {
+            console.error(error);
+            alert.classList = "d-block alert alert-danger";
+            alert.innerHTML = "Erreur de communication avec le serveur ! Contactez votre administrateur système.";
+        }
+        
     }
     static async getAll() {
+
         let json = await this.getJson();
         let arrayTache = [];
 
@@ -20,13 +30,16 @@ class ApiTaches {
             let nouvelleTache = new Tache(
                 tache.id,
                 tache.date,
-                tache.description,
+                decodeURI(tache.description),
                 tache.terminee
             );
             arrayTache.push(nouvelleTache);
         }
 
+        
+        
         return arrayTache;
+        
     }
     static async getEnCours() {
         let arrayTache = await this.getAll();
@@ -67,7 +80,7 @@ class ApiTaches {
             headers: { "Content-type": "application/json; charset=UTF-8" },
         })
             .then(function (response) {
-                ListeTaches.rafraichir();
+                ListeTaches.afficherTaches();
             })
             .catch((err) => console.log(err));
     }
@@ -78,7 +91,7 @@ class ApiTaches {
             headers: { "Content-type": "application/json; charset=UTF-8" },
         })
             .then(function (response) {
-                ListeTaches.rafraichir();
+                ListeTaches.afficherTaches();
             })
             .catch((err) => console.log(err));
     }
@@ -261,9 +274,6 @@ class ListeTaches {
 
     }
 
-    static rafraichir() {
-        this.afficherTaches();
-    }
     ////////////////////////////////////////////////////////////////////
     static getProgress() {
         if (this.nbTaches > 0) {
@@ -326,24 +336,23 @@ class ListeTaches {
 
     static ajouterTache() {
         const value = inputAjouter.value;
-        const regex = /[a-z0-9]{1,255}/gi;
-        if (value.match(regex)) {
-            const maTache = new Tache(null, null, inputAjouter.value, false);
-            ApiTaches.enregistrer(maTache).then(() => {
-                ApiTaches.getJson().then((json) => {
-                    
-                    maTache.setId(json[0].id);
-                    maTache.setDate(json[0].date);
-                    maTache.setDescription(json[0].description);
 
-                    this.listeTachesEnCours.insertAdjacentHTML("afterbegin", maTache.getHTML());
-                });
+        const maTache = new Tache(null, null, encodeURI(value), false);
+        ApiTaches.enregistrer(maTache).then(() => {
+            ApiTaches.getJson().then((json) => {
+                
+                maTache.setId(json[0].id);
+                maTache.setDate(json[0].date);
+                maTache.setDescription(decodeURI(json[0].description));
+
+                this.listeTachesEnCours.insertAdjacentHTML("afterbegin", maTache.getHTML());
             });
-            document.getElementById("inputAjouter").value = "";
+        });
+        document.getElementById("inputAjouter").value = "";
 
-            this.nbTaches += 1;
+        this.nbTaches += 1;
 
-        }
+        
     }
     static messageAvantSuppression(tacheId) {
         let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
@@ -375,3 +384,7 @@ ListeTaches.afficherTaches();
 ListeTaches.initFiltres();
 
 ListeTaches.initUserInput();
+
+let maString = "alert(\"Bonjour bonjour\")";
+encoded = encodeURI(maString);
+console.log(encoded);
