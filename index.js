@@ -340,9 +340,12 @@ class ListeTaches {
     }
 
     static ajouterTache() {
+        let alert = document.querySelector("#alert");
+
+        const inputAjouter = document.getElementById("inputAjouter");
         const value = inputAjouter.value;
 
-        if (value.length > 70) {
+        if (value.length <= 70) {
             const maTache = new Tache(null, null, encodeURI(value), false);
 
             ApiTaches.enregistrer(maTache).then(() => {
@@ -364,7 +367,7 @@ class ListeTaches {
             alert.innerHTML = "";
             alert.classList = "d-none";
         } else {
-            console.error(error);
+            console.error("Votre tâche ne peut pas faire plus de 70 caractères !");
             alert.classList = "d-block alert alert-danger";
             alert.innerHTML = "Votre tâche ne peut pas faire plus de 70 caractères !";
 
