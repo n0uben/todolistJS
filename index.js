@@ -338,6 +338,7 @@ class ListeTaches {
         const value = inputAjouter.value;
 
         const maTache = new Tache(null, null, encodeURI(value), false);
+
         ApiTaches.enregistrer(maTache).then(() => {
             ApiTaches.getJson().then((json) => {
                 
@@ -351,8 +352,9 @@ class ListeTaches {
         document.getElementById("inputAjouter").value = "";
 
         this.nbTaches += 1;
-
         
+        this.updateProgress();
+       
     }
     static messageAvantSuppression(tacheId) {
         let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
@@ -369,9 +371,11 @@ class ListeTaches {
                 this.listeTachesEnCours.removeChild(tacheASuppr);
             } else {
                 tacheASuppr = document.querySelector("#listeTachesTerminees #tache" + tacheId);
-                    this.listeTachesTerminees.removeChild(tacheASuppr);
-                }
-            })
+                this.listeTachesTerminees.removeChild(tacheASuppr);
+            }
+            this.nbTaches -=1;
+            this.updateProgress();
+        })
         }
 }
 
