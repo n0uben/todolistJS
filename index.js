@@ -83,15 +83,12 @@ class ApiTaches {
             .catch((err) => console.log(err));
     }
     /////////////////////////////////////////////////////////////////////
-    static supprimer(tacheId) {
-        console.log();
+    static async supprimer(tacheId) {
         fetch(this.baseUrl + tacheId, {
             method: "DELETE",
-
-            headers: { "Content-type": "application/json; charset=UTF-8" },
         })
-            .then(function () {
-                ListeTaches.rafraichir();
+            .then(function (response) {
+                return response;
             })
             .catch((err) => console.log(err));
     }
@@ -124,7 +121,12 @@ class Tache {
     getTerminee() {
         return this.terminee;
     }
-
+    setId(id) {
+        this.id = id;
+    }
+    setDate(date) {
+        this.date = date;
+    }
     setDescription(description) {
         this.description = description;
     }
@@ -138,13 +140,7 @@ class Tache {
     //     //à faire
     // }
 
-    static messageAvantSuppression(tacheId) {
-        let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
-
-        if (confirmationSup) {
-            ApiTaches.supprimer(tacheId);
-        }
-    }
+   
     getHTML() {
         let tacheCochee = "";
         let tacheDesactivee = "";
@@ -164,7 +160,7 @@ class Tache {
                 </div>
                 <div class="col-12 col-lg-6 d-flex justify-content-end align-items-center">
                 <button type="button" id="modifier${this.getid()}" onclick="ApiTaches.modifier(${this.getid()})" class="bouton-modifier btn btn-outline-primary mx-1 ${displayNone}"><i class="fas fa-edit"></i></button>
-                <button type="button" id="supprimer${this.getid()}" onclick="Tache.messageAvantSuppression(${this.getid()})" class="bouton-supprimer btn btn-outline-danger mx-1"><i class="far fa-trash-alt"></i></button>
+                <button type="button" id="supprimer${this.getid()}" onclick="ListeTaches.messageAvantSuppression(${this.getid()})" class="bouton-supprimer btn btn-outline-danger mx-1"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>`;
@@ -332,9 +328,16 @@ class ListeTaches {
         const value = inputAjouter.value;
         const regex = /[a-z0-9]{1,255}/gi;
         if (value.match(regex)) {
-            const maTache = new Tache(null, null, inputAjouter.value, null);
+            const maTache = new Tache(null, null, inputAjouter.value, false);
             ApiTaches.enregistrer(maTache).then(() => {
-                this.rafraichir();
+                ApiTaches.getJson().then((json) => {
+                    
+                    maTache.setId(json[0].id);
+                    maTache.setDate(json[0].date);
+                    maTache.setDescription(json[0].description);
+
+                    this.listeTachesEnCours.insertAdjacentHTML("afterbegin", maTache.getHTML());
+                });
             });
             document.getElementById("inputAjouter").value = "";
 
@@ -342,6 +345,25 @@ class ListeTaches {
 
         }
     }
+    static messageAvantSuppression(tacheId) {
+        let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
+
+        if (confirmationSup) {
+            ListeTaches.supprimerTache(tacheId);
+        }
+    }
+
+    static async supprimerTache(tacheId) {
+        ApiTaches.supprimer(tacheId).then(() => {
+            let tacheASuppr = document.querySelector("#listeTachesEnCours #tache" + tacheId);
+            if (tacheASuppr != null) {
+                this.listeTachesEnCours.removeChild(tacheASuppr);
+            } else {
+                tacheASuppr = document.querySelector("#listeTachesTerminees #tache" + tacheId);
+                    this.listeTachesTerminees.removeChild(tacheASuppr);
+                }
+            })
+        }
 }
 
 /////////////////////////////////////////////////////////////
