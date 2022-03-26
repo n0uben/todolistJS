@@ -74,6 +74,15 @@ class ApiTaches {
         let descriptionTache = {
             description: nouvelleDescription,
         };
+        
+        if (nouvelleDescription.length>=70){
+            nouvelleDescription2 = prompt("trop long");
+            while(nouvelleDescription.length>=70){
+                nouvelleDescription = prompt("trop long");
+            }
+            
+        }
+      
         fetch(this.baseUrl + tacheId, {
             method: "PUT",
             body: JSON.stringify(descriptionTache),
