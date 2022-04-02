@@ -19,7 +19,7 @@ class ApiTaches {
             alert.classList = "d-block alert alert-danger";
             alert.innerHTML = "Erreur de communication avec le serveur ! Contactez votre administrateur système.";
         }
-        
+
     }
     static async getAll() {
 
@@ -36,10 +36,8 @@ class ApiTaches {
             arrayTache.push(nouvelleTache);
         }
 
-        
-        
         return arrayTache;
-        
+
     }
     static async getEnCours() {
         let arrayTache = await this.getAll();
@@ -71,14 +69,14 @@ class ApiTaches {
         let nouvelleDescription = prompt("quelle est la nouvelle Tâche ?");
         //console.log(nouvelleDescription);
 
-        while(nouvelleDescription.length >= 70){
+        while (nouvelleDescription.length >= 70) {
             nouvelleDescription = prompt("Votre tache fait plus de 70 caractères, veuillez la ressaisir : ");
         }
 
         let descriptionTache = {
             description: nouvelleDescription,
         };
-        
+
         fetch(this.baseUrl + tacheId, {
             method: "PUT",
             body: JSON.stringify(descriptionTache),
@@ -154,11 +152,7 @@ class Tache {
     toString() {
         return this.toString();
     }
-    // equals(other) {
-    //     //à faire
-    // }
 
-   
     getHTML() {
         let tacheCochee = "";
         let tacheDesactivee = "";
@@ -196,11 +190,11 @@ class ListeTaches {
     static nbTaches = 0;
     static nbTachesTerminees = 0;
 
-    
+
     static boutonTout = document.getElementById("afficherTout");
     static boutonEnCours = document.getElementById("afficherEnCours");
     static boutonTerminees = document.getElementById("afficherTerminees");
-    
+
     static progressEnCours = document.getElementById("progressEnCours");
     static progressTerminees = document.getElementById("progressTerminees");
 
@@ -269,13 +263,13 @@ class ListeTaches {
                 }
 
                 this.nbTaches += 1;
-                
+
             }
-            
+
         }).then(() => this.updateProgress())
-        .catch((err) => {
-            console.error(err);
-        })
+            .catch((err) => {
+                console.error(err);
+            })
 
     }
 
@@ -287,7 +281,7 @@ class ListeTaches {
         return 0;
     }
     static updateProgress() {
-        
+
         let progress = this.getProgress();
 
         let todo = 100 - progress;
@@ -350,18 +344,18 @@ class ListeTaches {
 
             ApiTaches.enregistrer(maTache).then(() => {
                 ApiTaches.getJson().then((json) => {
-                    
+
                     maTache.setId(json[0].id);
                     maTache.setDate(json[0].date);
                     maTache.setDescription(decodeURI(json[0].description));
-    
+
                     this.listeTachesEnCours.insertAdjacentHTML("afterbegin", maTache.getHTML());
                 });
             });
             document.getElementById("inputAjouter").value = "";
-    
+
             this.nbTaches += 1;
-            
+
             this.updateProgress();
 
             alert.innerHTML = "";
@@ -372,10 +366,8 @@ class ListeTaches {
             alert.innerHTML = "Votre tâche ne peut pas faire plus de 70 caractères !";
 
         }
-
-        
-       
     }
+    
     static messageAvantSuppression(tacheId) {
         let confirmationSup = confirm("Voulez vous supprimer cette tâche ?");
 
@@ -393,10 +385,10 @@ class ListeTaches {
                 tacheASuppr = document.querySelector("#listeTachesTerminees #tache" + tacheId);
                 this.listeTachesTerminees.removeChild(tacheASuppr);
             }
-            this.nbTaches -=1;
+            this.nbTaches -= 1;
             this.updateProgress();
         })
-        }
+    }
 }
 
 /////////////////////////////////////////////////////////////
